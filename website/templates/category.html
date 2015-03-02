@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="main-content">
+	<div class="row">
+		<div class="col-sm-offset-3 col-sm-6 col-xs-12">
+			<div class="form-group">
+	        	<label for="categor">Your Categories</label>
+	        	<select name="category" id="category" class="form-control">	        		
+	        	</select>	        	
+	       	</div>
+	       	<div class="form-group" align="left">					
+				<button type="button" class="btn btn-success btn-xs" id="save">New</button>				    
+			</div>
+			<form id="category_form">
+				<div class="form-group">
+	                <label>Name</label>
+	                <input type="text" class="form-control" name="name" id="name">
+	            </div>	            
+	            <div class="form-group" align="center">					
+					<button type="button" class="btn btn-primary btn-lg" id="save">Save!</button>				    
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block inline_js %}
+<script type="text/javascript">
+	wallet._categories()
+	$('#category').change(function(e){ console.log($(this).val()) });
+</script>
+{% endblock inline_js %}
