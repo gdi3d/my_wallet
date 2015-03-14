@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="main-content">
+<div id="main_content">
 	<div class="row">
 		<div class="col-lg-offset-3 col-lg-6 col-md-12">
 			<div class="form-group">
-	        	<label for="wallet">Your Wallets</label>
-	        	<select name="wallet" id="wallet" class="form-control">	        		
+	        	<label for="id">Your Wallets</label>
+	        	<select name="id" id="wallet" class="form-control" data-bind="options: wallets, value: id, optionsText: 'name', optionsValue:'id', event: {change: w.wallet_view.change_event}">
 	        	</select>
 	       	</div>
 	       	<div class="form-group" align="left">					
-				<button type="button" class="btn btn-success btn-xs" id="save">New</button>				    
+				<button type="button" class="btn btn-success btn-xs" id="new">New</button>
+				<button type="button" class="btn btn-danger btn-xs" id="del">Delete</button>
 			</div>
 			<form id="wallets_form">
 				<div class="form-group">
@@ -18,17 +19,16 @@
 	            </div>
 	            <label for="">Initial Amount</label>
 				<div class="form-group input-group">					
-		            <span class="input-group-addon">$</span>
+		            <span class="input-group-addon" id="currency"></span>
 		            <input type="text" class="form-control" name="initial_amount" placeholder="0.00" id="initial_amount" data-bind="textInput: initial_amount">
-		        </div>
+		        </div>		        
 		        <div class="form-group">
 	                <label>Note</label>
 	                <textarea class="form-control" name="note" rows="3" id="note" data-bind="textInput: note"></textarea>
 	            </div>
 	            <div class="form-group" align="center">					
 					<button type="button" class="btn btn-primary btn-lg" id="save">Save!</button>				    
-				</div>
-				<input type="hidden" id="id" name="id" data-bind="textInput: id">
+				</div>				
 			</form>
 		</div>
 	</div>
@@ -36,18 +36,6 @@
 {% endblock %}
 {% block inline_js %}
 <script type="text/javascript">
-	
-	var walletModel = ko.mapping.fromJS({'name':null, 'id':null, 'initial_amount':null, 'note':null});
-	ko.applyBindings(walletModel);
-	
-	wallet._wallets(function(){$('#wallet').trigger('change')});
-	
-	$('#wallet').change(function(e){ 
-		$.getJSON("/api/v1/wallet/"+$(this).val(), function(data)
-		{
-			ko.mapping.fromJS(data, walletModel);
-		});
-	});
-
+w.wallet_view.init()
 </script>
 {% endblock inline_js %}

@@ -3,30 +3,33 @@
 <div id="main_content">
 	<div class="row" id="form-container">
 		<div class="col-lg-offset-3 col-lg-6 col-md-12">
-			<h2 id="action_msg"></h2>			
-			<form id="transaction_form">					
-				<label for="" id="action_amount"></label>
-					<div class="form-group input-group">					
-			            <span class="input-group-addon" id="amount_addon"></span>
-			            <input type="text" class="form-control" name="amount" placeholder="0.00" id="amount" maxlength="13" data-bind="textInput: item.amount">		            
-			        </div>			        
+			<h2 id="action_msg">&nbsp;</h2>			
+			<form id="transaction_form">			
 
-		        <div class="form-group">
-		        	<label for="category">Category</label>
-		        	<select name="category" id="category" class="form-control" data-bind="value: item.category.id">	        		
-		        	</select>
-		       	</div>
+				<label for="" id="action_item_amount"></label>
+					<div class="form-group input-group">					
+			            <span class="input-group-addon" id="currency"></span>
+			            <input type="text" class="form-control" name="item_amount" placeholder="0.00" id="amount" maxlength="13" data-bind="textInput: item.amount">
+			        </div>		        
+
 
 		        <div class="form-group">
 		        	<label for="wallet">Wallet</label>
-		        	<select name="wallet" id="wallet" class="form-control" data-bind="value: wallet.id">	        		
+		        	<select name="wallet_id" id="wallet_id" class="form-control" data-bind="options: wallets, value: wallet.id, optionsText: 'name', optionsValue:'id', optionsCaption: 'Choose a Wallet...'">
 		        	</select>
 		       	</div>
 
+		        <div class="form-group">
+		        	<label for="category">Category</label>
+		        	<select name="category" id="category" class="form-control" data-bind="options: categories, value: item.category.id, optionsText: 'name', optionsValue:'id', optionsCaption: 'Category?...'">
+	        		</select>
+		       	</div>
+
+
 	            <label>Date</label>
 		       	<div class="form-group input-group">
-	                <input class="form-control disabled" name="date" id="date" data-date-format="dd/mm/yyyy" placeholder="Today" data-bind="textInput: date">
-	                <span class="input-group-addon" id="amount_addon"><i class="fa fa-calendar"></i></span>	                
+	                <input class="form-control disabled" name="date" id="date" data-date-format="yy/mm/dddd" placeholder="Empty for Today" data-bind="textInput: date">
+	                <span class="input-group-addon" id="calendar"><i class="fa fa-calendar"></i></span>	                
 	            </div>
 
 	            <div class="form-group">
@@ -34,7 +37,7 @@
 	                <textarea class="form-control" name="note" rows="3" id="note" data-bind="textInput: item.note"></textarea>
 	            </div>
 				
-				<input type="hidden" id="action">
+				<input type="hidden" id="id" name="id" data-bind="textInput: id">
 
 	            <div class="form-group" align="center">					
 					<button type="button" class="btn btn-primary btn-lg" id="save">Save!</button>				    
@@ -48,29 +51,6 @@
 
 {% block inline_js %}
 <script type="text/javascript">	
-{% if operation == 'in' %}
-wallet.main_actions.income()
-{% elif operation == 'out' %}
-wallet.main_actions.expense()
-{% else %}
-{% endif %}
-
-$('#save').click(function(){ wallet.main_actions.save() });
-wallet.init();
-
-$('#date').datepicker({
-    format: 'dd/mm/yyyy',
-    todayBtn: "linked",
-    todayHighlight: true
-})
-
-	var transactionModel = ko.mapping.fromJS({"id":null,"item":{"id":null,"category":{"id":null},"amount":null,"note":null,"pending":false},"wallet":{"id":null},"date":null});
-	ko.applyBindings(transactionModel);
-	 
-	$.getJSON("/api/v1/transactions/40", function(data)
-	{
-		ko.mapping.fromJS(data, transactionModel);
-	});
-
+w.transaction_view.init({{ pk }});
 </script>
 {% endblock %}

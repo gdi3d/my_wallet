@@ -22,7 +22,7 @@ class Wallet(models.Model):
 	user = models.ForeignKey(User)
 	name = models.CharField(max_length=255)
 	initial_amount = models.DecimalField(_('Initial Amount'), max_digits=12, decimal_places=4, default=0)
-	note = models.TextField(blank=True)
+	note = models.TextField(blank=True, null=True)
 
 	class Meta:
 		verbose_name = "Wallet"        
@@ -36,7 +36,7 @@ class AbstractItem(models.Model):
 	amount = models.DecimalField(_('Amount'), max_digits=12, decimal_places=4)
 	note = models.TextField(blank=True)
 	pending = models.BooleanField(default=False)
-	category = models.ForeignKey(Category, null=True, blank=True)
+	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
 
 	class Meta:		
 		abstract = True
