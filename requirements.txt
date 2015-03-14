@@ -1,0 +1,8 @@
+Django==1.7.2
+django-filter==0.9.1
+django-grappelli==2.6.3
+django-rest-auth==0.3.4
+django-suit==0.2.12
+djangorestframework==3.0.2
+Markdown==2.5.2
+six==1.9.0
