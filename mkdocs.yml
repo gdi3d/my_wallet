@@ -1,5 +1,5 @@
 site_name: My Docs
 theme: readthedocs
 pages:
-  - ['index.md', 'Home']
-  - ['test.md', 'Some shit']
+- ["index.md", "Home"]
+- ["test.md", "Some shit"]
