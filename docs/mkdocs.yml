@@ -1,6 +1,0 @@
-site_name: My Wallet
-docs_dir: docs
-theme: readthedocs
-
-pages:
-    - ['hello.md', 'Hello!']
