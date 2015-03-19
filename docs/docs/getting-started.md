@@ -89,7 +89,7 @@ Allow: GET, POST, HEAD, OPTIONS
     ]
 }
 ```
-For more doc on this endpoint check [http://127.0.0.1:8000/api/v1/items/](http://127.0.0.1:8000/api/v1/items/)
+For more info on this endpoint check [http://127.0.0.1:8000/api/v1/items/](http://127.0.0.1:8000/api/v1/items/)
 
 ### Transactions
 Returns all the transactions for the current user in all wallets
@@ -153,4 +153,122 @@ Allow: GET, POST, HEAD, OPTIONS
     ]
 }
 ```
-For more doc on this endpoint check [http://127.0.0.1:8000/api/v1/transactions/](http://127.0.0.1:8000/api/v1/transactions/)
+For more info on this endpoint check [http://127.0.0.1:8000/api/v1/transactions/](http://127.0.0.1:8000/api/v1/transactions/)
+
+### Transactions Total
+Returns the total amount of a transactions search
+
+Api response example:
+
+**GET api/v1/transactions-total**
+```
+HTTP 200 OK
+Content-Type: application/json
+Vary: Accept
+Allow: GET, HEAD, OPTIONS
+
+{
+    "total": "70.00"
+}
+```
+For more info on this endpoint check [http://127.0.0.1:8000/api/v1/transactions-total/](http://127.0.0.1:8000/api/v1/transactions-total/)
+
+### Category
+Returns all the categories for the current user
+
+It's the representation of the Category model on **wallet/models.py**
+
+Api response example:
+
+**GET api/v1/category**
+```
+HTTP 200 OK
+Content-Type: application/json
+Vary: Accept
+Allow: GET, POST, HEAD, OPTIONS
+
+{
+    "count": 6, 
+    "next": null, 
+    "previous": null, 
+    "results": [
+        {
+            "id": 2, 
+            "name": "Food"
+        }, 
+        {
+            "id": 41, 
+            "name": "Freelance Work"
+        }, 
+        {
+            "id": 3, 
+            "name": "Gas"
+        }
+        ...
+    ]
+}
+```
+For more info on this endpoint check [http://127.0.0.1:8000/api/v1/category/](http://127.0.0.1:8000/api/v1/category/)
+
+### Wallet
+Returns all the wallets for the current user
+
+It's the representation of the Wallet model on **wallet/models.py**
+
+Api response example:
+
+**GET api/v1/wallet**
+```
+HTTP 200 OK
+Content-Type: application/json
+Vary: Accept
+Allow: GET, POST, HEAD, OPTIONS
+
+{
+    "count": 1, 
+    "next": null, 
+    "previous": null, 
+    "results": [
+        {
+            "id": 8, 
+            "name": "Bank account", 
+            "initial_amount": "500.0000", 
+            "note": "My first account"
+        }
+    ]
+}
+```
+For more info on this endpoint check [http://127.0.0.1:8000/api/v1/wallet/](http://127.0.0.1:8000/api/v1/wallet/)
+
+### Wallet Total
+Returns the balance of each wallet for the current user
+
+It's the representation of the Wallet model on **wallet/models.py**
+
+Api response example:
+
+**GET api/v1/wallet-total**
+```
+HTTP 200 OK
+Content-Type: application/json
+Vary: Accept
+Allow: GET, HEAD, OPTIONS
+
+{
+    "count": 1, 
+    "next": null, 
+    "previous": null, 
+    "results": [
+        {
+            "wallet": {
+                "id": 8, 
+                "name": "Bank account", 
+                "initial_amount": "500.0000", 
+                "note": "My first account"
+            }, 
+            "total": "70.0000"
+        }
+    ]
+}
+```
+For more info on this endpoint check [http://127.0.0.1:8000/api/v1/wallet-total/](http://127.0.0.1:8000/api/v1/wallet-total/)

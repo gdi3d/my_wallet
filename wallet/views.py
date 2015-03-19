@@ -49,7 +49,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     """
     Viewing and editing transactions.
 
-    You can filter by using:
+    Filters:
 
     * **api/v1/transactions/?wallet=WALLET_ID**
 
@@ -60,7 +60,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
     Search items on transactions that belong to a category that has STRING on name property
 
     * **api/v1/transactions/?category_id=CATEGORY_ID**  
-    Search items on transactions that belongs to the specified CATEGORY_ID
+    Search items on transactions that belongs to the specified CATEGORY_ID. If you want to choose multiple categories
+    set the ids separated by a comma like category_id=1,2,3
     """
     serializer_class = TransactionSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)  
@@ -91,7 +92,23 @@ class TransactionViewSet(viewsets.ModelViewSet):
     	return transactions
 
 class TransactionTotalViewSet(generics.RetrieveAPIView):
+    """
+    Returns the total amount for transactions search
 
+    Filters:
+
+    * **api/v1/transactions/?wallet=WALLET_ID**
+
+    * **api/v1/transactions/?note=STRING**  
+    Search items on transactions that has STRING on note property
+
+    * **api/v1/transactions/?category=STRING**  
+    Search items on transactions that belong to a category that has STRING on name property
+
+    * **api/v1/transactions/?category_id=CATEGORY_ID**  
+    Search items on transactions that belongs to the specified CATEGORY_ID. If you want to choose multiple categories
+    set the ids separated by a comma like category_id=1,2,3
+    """
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
     def get(self, request):
@@ -151,7 +168,15 @@ class WalletViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 class WalletTotalViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Returns the balance of all wallets
 
+    Filters:
+
+    * **api/v1/wallet-total/?wallet_id=ID**  
+    Returns the specified balance for the wallet or wallets. If you want to choose multiple wallets
+    set the ids separated by a comma like wallet_id=1,2,3
+    """
     serializer_class = WalletTotalSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
@@ -159,8 +184,15 @@ class WalletTotalViewSet(viewsets.ReadOnlyModelViewSet):
 
         user = self.request.user
         wallets = Wallet.objects.filter(user=user)
+        wallet_id = self.request.GET.get('wallet_id')
         
-        _total = Transaction.objects.filter(wallet__user=user).values('wallet').annotate(total=Sum('item__amount'))
+        _total = Transaction.objects.filter(wallet__user=user)
+
+        if wallet_id:
+            wallet_id = wallet_id.split(',')
+            _total = _total.filter(wallet__in=wallet_id)
+
+        _total = _total.values('wallet').annotate(total=Sum('item__amount'))
 
         total = []
         for t in _total:
