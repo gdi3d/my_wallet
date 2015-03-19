@@ -20,7 +20,9 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 # Create your views here.
 class ItemViewSet(viewsets.ModelViewSet):
     """
-    A simple ViewSet for viewing and editing accounts.
+    Viewing and editing items.
+
+    No filters options.
     """
     serializer_class = ItemSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -29,6 +31,7 @@ class ItemViewSet(viewsets.ModelViewSet):
 
         user = self.request.user
         return Item.objects.filter(transaction__wallet__user=user)
+        
 
 class FavoriteItemViewSet(viewsets.ModelViewSet):
     """
@@ -44,7 +47,20 @@ class FavoriteItemViewSet(viewsets.ModelViewSet):
 
 class TransactionViewSet(viewsets.ModelViewSet):
     """
-    A simple ViewSet for viewing and editing accounts.
+    Viewing and editing transactions.
+
+    You can filter by using:
+
+    * **api/v1/transactions/?wallet=WALLET_ID**
+
+    * **api/v1/transactions/?note=STRING**  
+    Search items on transactions that has STRING on note property
+
+    * **api/v1/transactions/?category=STRING**  
+    Search items on transactions that belong to a category that has STRING on name property
+
+    * **api/v1/transactions/?category_id=CATEGORY_ID**  
+    Search items on transactions that belongs to the specified CATEGORY_ID
     """
     serializer_class = TransactionSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)  
@@ -55,6 +71,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     	wallet = self.request.QUERY_PARAMS.get('wallet')
         note = self.request.GET.get('note')
         category = self.request.GET.get('category')
+        category_id = self.request.GET.get('category_id')
 
     	transactions = Transaction.objects.filter(wallet__user=user)
 
@@ -66,6 +83,10 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
         if category:
             transactions = transactions.filter(item__category__name__icontains = category)
+
+        if category_id:
+            category_id = category_id.split(',')
+            transactions = transactions.filter(item__category__id__in = category_id)
 
     	return transactions
 

@@ -1,1 +1,5 @@
-site_name: My Docs
+site_name: My Wallet
+theme: readthedocs
+pages:
+- ['index.md', 'Home']
+- ['getting-started.md', 'Quick Start', 'Getting Started']

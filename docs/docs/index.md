@@ -1,17 +1,7 @@
-# Welcome to MkDocs
+# My Wallet
+My Wallet it's a personal project that follows the principle of **eat you own dog food**.
 
-For full documentation visit [mkdocs.org](http://mkdocs.org).
+The purpose of the app is to keep track of your transactions for differents accounts, like bank accounts, wallets, socks or any weird place you want.
+It uses [Django](https://www.djangoproject.com/) on the backend and [Django Rest Framework](http://www.django-rest-framework.org/) on top of it to provide a nice RESTful interface.
 
-## Commands
-
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs help` - Print this help message.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+Includes a nice responsive html website to play with it.
