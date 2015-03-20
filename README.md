@@ -31,9 +31,8 @@ The data, using the local environment (setted by local_server.sh), is saved usin
 ## Documentation
 You can access to the documentation on [http://my-wallet.readthedocs.org/en/latest/](http://my-wallet.readthedocs.org/en/latest/)
 
-or using mkdocs server:
+or using mkdocs:
 ```
-cd docs
 mkdocs serve
 ```
 and then open (http://127.0.0.1:8000/)[http://127.0.0.1:8000/]
