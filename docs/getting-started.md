@@ -1,4 +1,4 @@
-# Getting Started
+# Getting Started (In progress...)
 
 ## Installation <a class="headerlink" href="#installation" title="Permalink to this headline">*</a>
 I would recommend to install it using [Virtual Environments](http://docs.python-guide.org/en/latest/dev/virtualenvs/) (and [virtualenvwrapper](http://docs.python-guide.org/en/latest/dev/virtualenvs/#virtualenvwrapper) that provides autocomplete features).  

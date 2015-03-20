@@ -1,4 +1,4 @@
-# My Wallet
+# My Wallet (this documentation is not finished yet!)
 My Wallet it's a personal project that follows the principle of **eat you own dog food**.
 
 The purpose of the app is to keep track of your transactions for differents accounts, like bank accounts, wallets, socks or any weird place you want.
