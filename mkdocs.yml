@@ -1,6 +1,6 @@
 site_name: My Wallet
 theme: readthedocs
-docs_dir: 'docs/docs'
+docs_dir: 'docs'
 pages:
 - ['index.md', 'Home']
 - ['getting-started.md', 'Quick Start', 'Getting Started']

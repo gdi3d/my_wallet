@@ -1,6 +1,6 @@
 # Getting Started
 
-## Installation <a class="headerlink" href="#installation" title="Permalink to this headline">¶</a>
+## Installation <a class="headerlink" href="#installation" title="Permalink to this headline">*</a>
 I would recommend to install it using [Virtual Environments](http://docs.python-guide.org/en/latest/dev/virtualenvs/) (and [virtualenvwrapper](http://docs.python-guide.org/en/latest/dev/virtualenvs/#virtualenvwrapper) that provides autocomplete features).  
 
 Install:
@@ -22,13 +22,13 @@ Now open your browser at:
 
 The data, using the local environment (setted by local_server.sh), is saved using sqlite as a database.
 
-## Apps <a class="headerlink" href="#installation" title="Permalink to this headline">¶</a>
+## Apps <a class="headerlink" href="#installation" title="Permalink to this headline">*</a>
 My wallets it's divided into 3 apps
 * API
 * Wallet
 * Website
 
-#### API <a class="headerlink" href="#installation" title="Permalink to this headline">¶</a>
+#### API <a class="headerlink" href="#installation" title="Permalink to this headline">*</a>
 The api app it's very simple and has one single file **urls.py**.
 
 The only function of this app is to expose API urls of others applications. This way I can handle all my API url routing in one place
@@ -44,7 +44,7 @@ You can take a look at **website/static/js/wallet.js** for more info.
 
 Each view is represented by a singleton that handles all the CRUD operations by talking to the API
 
-## API EndPoints <a class="headerlink" href="#installation" title="Permalink to this headline">¶</a>
+## API EndPoints <a class="headerlink" href="#installation" title="Permalink to this headline">*</a>
 My wallet has several endpoints that you can use for
 
 ### Items
