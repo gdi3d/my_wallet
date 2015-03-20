@@ -1,6 +1,5 @@
 site_name: My Wallet
 theme: readthedocs
-docs_dir: docs/docs
 
 pages:
 - ['index.md', 'Home']
