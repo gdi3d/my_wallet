@@ -35,6 +35,6 @@ or using mkdocs:
 ```
 mkdocs serve
 ```
-and then open (http://127.0.0.1:8000/)[http://127.0.0.1:8000/]
+and then open [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
 For more info about mkdocs read [mkdocs](http://www.mkdocs.org/)
