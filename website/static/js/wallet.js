@@ -935,9 +935,8 @@ w.history_view =
 
 /**
  * Wallets total object
- * @param  {[type]} wallet [description]
- * @param  {[type]} total  [description]
- * @return {[type]}        [description]
+ * @param  {object} wallet
+ * @param  {object} total
  */
 function dashboard_view_wallet_widget_row(wallet, total)
 {
@@ -946,16 +945,24 @@ function dashboard_view_wallet_widget_row(wallet, total)
 	self.total = total;
 }
 
+/**
+ * Dashboard view
+ */
 w.dashboard_view =
 {
 	wallets_rows: {},
+	/**
+	 * Initializate the view
+	 */
 	init: function()
 	{
 		w.dashboard_view.wallets_rows = ko.observableArray([]);
 		ko.applyBindings(w.dashboard_view);
 
+		// Get the wallet's total
 		$.getJSON("/api/v1/wallet-total/", function(data)
 		{
+			// create the wallet total objects
 	        var mapped_wallet = $.map(data.results, function(v) 
 	        {
 	        	var total = Number(v.wallet.initial_amount) + Number(v.total)
@@ -967,6 +974,9 @@ w.dashboard_view =
 	        w.dashboard_view.wallets_rows(mapped_wallet);
 	    });	    
 	},
+	/**
+	 * Logout the user
+	 */
 	logout: function()
 	{
 		var callback =
