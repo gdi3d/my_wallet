@@ -22,15 +22,17 @@ Now open your browser at:
 
 The data, using the local environment (setted by local_server.sh), is saved using sqlite as a database.
 
+---
+
 ## Apps
 My wallets it's divided into 3 apps
 
-* API
-* Wallet
-* Website
+* [API](#api)
+* [Wallet](#wallet)
+* [Website](#website)
 
 ## API
-The api app it's very simple and has one single file **urls.py**.
+The api app it's very simple and has only one file **urls.py**.
 
 The only function of this app is to expose API urls of others applications. This way I can handle all my API url routing in one place
 and if I ever need to change it to some other path, like **api/v2/**, I just change it over there.
@@ -45,8 +47,21 @@ You can take a look at **website/static/js/wallet.js** for more info.
 
 Each view is represented by a singleton that handles all the CRUD operations by talking to the API
 
+Components used:
+
+* [Bootstrap](http://getbootstrap.com/)
+* [jQuery](https://jquery.com/)
+* [jQuery Numeric](http://www.texotela.co.uk/code/jquery/numeric/)
+* [jQuery Cookie](https://github.com/carhartl/jquery-cookie)
+* [accounting](http://openexchangerates.github.io/accounting.js)
+* [jQuery Simple Pagination](http://flaviusmatis.github.com/simplePagination.js/)
+* [Knockout](http://knockoutjs.com/index.html)
+* [Knockout Mapping Plugin](http://knockoutjs.com/documentation/plugins-mapping.html)
+
+---
+
 ## API EndPoints
-My wallet has several endpoints that you can use for
+My wallet has several endpoints that you can use
 
 ### Items
 Returns all the items on the transactions for the current user in all the wallets.
@@ -172,7 +187,7 @@ Allow: GET, HEAD, OPTIONS
     "total": "70.00"
 }
 ```
-For more info on this endpoint check [http://127.0.0.1:8000/api/v1/transactions-total/](http://127.0.0.1:8000/api/v1/transactions-total/)
+For more documentation on this endpoint check [http://127.0.0.1:8000/api/v1/transactions-total/](http://127.0.0.1:8000/api/v1/transactions-total/)
 
 ### Category
 Returns all the categories for the current user
@@ -209,7 +224,7 @@ Allow: GET, POST, HEAD, OPTIONS
     ]
 }
 ```
-For more info on this endpoint check [http://127.0.0.1:8000/api/v1/category/](http://127.0.0.1:8000/api/v1/category/)
+For more documentation on this endpoint check [http://127.0.0.1:8000/api/v1/category/](http://127.0.0.1:8000/api/v1/category/)
 
 ### Wallet
 Returns all the wallets for the current user
@@ -239,7 +254,7 @@ Allow: GET, POST, HEAD, OPTIONS
     ]
 }
 ```
-For more info on this endpoint check [http://127.0.0.1:8000/api/v1/wallet/](http://127.0.0.1:8000/api/v1/wallet/)
+For more documentation on this endpoint check [http://127.0.0.1:8000/api/v1/wallet/](http://127.0.0.1:8000/api/v1/wallet/)
 
 ### Wallet Total
 Returns the balance of each wallet for the current user
@@ -272,4 +287,4 @@ Allow: GET, HEAD, OPTIONS
     ]
 }
 ```
-For more info on this endpoint check [http://127.0.0.1:8000/api/v1/wallet-total/](http://127.0.0.1:8000/api/v1/wallet-total/)
+For more documentation on this endpoint check [http://127.0.0.1:8000/api/v1/wallet-total/](http://127.0.0.1:8000/api/v1/wallet-total/)
