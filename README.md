@@ -12,7 +12,6 @@ I would recommend to install it using [Virtual Environments](http://docs.python-
 Install:
 ```
 mkvirtualenv my_wallet
-workon my_wallet
 mkdir my_wallet
 cd my_wallet
 git clone https://github.com/gdi3d/my_wallet .

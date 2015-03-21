@@ -1,6 +1,6 @@
 # Getting Started (In progress...)
 
-## Installation <a class="headerlink" href="#installation" title="Permalink to this headline">*</a>
+## Installation
 I would recommend to install it using [Virtual Environments](http://docs.python-guide.org/en/latest/dev/virtualenvs/) (and [virtualenvwrapper](http://docs.python-guide.org/en/latest/dev/virtualenvs/#virtualenvwrapper) that provides autocomplete features).  
 
 Install:
@@ -22,29 +22,30 @@ Now open your browser at:
 
 The data, using the local environment (setted by local_server.sh), is saved using sqlite as a database.
 
-## Apps <a class="headerlink" href="#installation" title="Permalink to this headline">*</a>
+## Apps
 My wallets it's divided into 3 apps
+
 * API
 * Wallet
 * Website
 
-#### API <a class="headerlink" href="#installation" title="Permalink to this headline">*</a>
+## API
 The api app it's very simple and has one single file **urls.py**.
 
 The only function of this app is to expose API urls of others applications. This way I can handle all my API url routing in one place
 and if I ever need to change it to some other path, like **api/v2/**, I just change it over there.
 
-### Wallet
+## Wallet
 All the models, views and serializers of the project.
 
-### Website
+## Website
 A web interface to use the application based mostly on javascript.
 
 You can take a look at **website/static/js/wallet.js** for more info. 
 
 Each view is represented by a singleton that handles all the CRUD operations by talking to the API
 
-## API EndPoints <a class="headerlink" href="#installation" title="Permalink to this headline">*</a>
+## API EndPoints
 My wallet has several endpoints that you can use for
 
 ### Items
