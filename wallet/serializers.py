@@ -15,6 +15,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Item
+		exclude = ('pending',)
 
 class WalletSerializer(serializers.ModelSerializer):
 

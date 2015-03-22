@@ -31,16 +31,16 @@ My wallets it's divided into 3 apps
 * [Wallet](#wallet)
 * [Website](#website)
 
-## API
+### API
 The api app it's very simple and has only one file **urls.py**.
 
 The only function of this app is to expose API urls of others applications. This way I can handle all my API url routing in one place
 and if I ever need to change it to some other path, like **api/v2/**, I just change it over there.
 
-## Wallet
+### Wallet
 All the models, views and serializers of the project.
 
-## Website
+### Website
 A web interface to use the application based mostly on javascript.
 
 You can take a look at **website/static/js/wallet.js** for more info. 
