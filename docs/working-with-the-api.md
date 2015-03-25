@@ -152,3 +152,157 @@ To add a new item just send a POST to the url **/api/v1/items/* with following j
     "note": STRING
 }
 ```
+
+We can take advantage of the OPTIONS method and examine the endpoint more deeply without having to read the code
+
+Open your browser on [http://127.0.0.1:8000/api/v1/items/](http://127.0.0.1:8000/api/v1/items/) (remember to be logged in) and click the **OPTIONS** button. You should see this:
+
+```
+HTTP 200 OK
+Content-Type: application/json
+Vary: Accept
+Allow: GET, POST, HEAD, OPTIONS
+
+{
+    "name": "Item List", 
+    "description": "Viewing and editing items.\n\nNo filters options.", 
+    "renders": [
+        "application/json", 
+        "text/html"
+    ], 
+    "parses": [
+        "application/json", 
+        "application/x-www-form-urlencoded", 
+        "multipart/form-data"
+    ], 
+    "actions": {
+        "POST": {
+            "id": {
+                "type": "integer", 
+                "required": false, 
+                "read_only": true, 
+                "label": "ID"
+            }, 
+            "category": {
+                "type": "field", 
+                "required": false, 
+                "read_only": true, 
+                "label": "Category"
+            }, 
+            "category_id": {
+                "type": "integer", 
+                "required": false, 
+                "read_only": false, 
+                "label": "Category id"
+            }, 
+            "amount": {
+                "type": "decimal", 
+                "required": true, 
+                "read_only": false, 
+                "label": "Amount"
+            }, 
+            "note": {
+                "type": "string", 
+                "required": false, 
+                "read_only": false, 
+                "label": "Note"
+            }
+        }
+    }
+}
+```
+
+Here you can see that the field **category_id** is an **integer** type and is **not required**.
+
+You can also notice that we have two fields related to categories: **category** and **category_id** and that the main difference between them is that we use **category** on **GET** request, that give us the category object, and **category_id** when creating a new item object.
+
+Let's try to add a new item using the api. We can try it on our browser, using the form that Django Rest Framework gives us, or using a python shell like this:
+
+Open a python console
+
+___IMPORTANT: You need to be logged in. If you're not, read the [Login](#login) steps and then come back___
+
+```
+./shell_local_server.sh
+```
+
+Once it's open:
+```
+from django.test import Client
+c = Client()
+data = {'category_id':2, 'amount': 9.5432, 'note':"Hey! i'm testing this api"}
+r = c.post('/api/v1/items/')
+```
+
+Try `r.status_code`, it should return `201` if the item was created.
+
+To access the data returned by the api type `r.content`, it should return something like
+
+```
+'{"id":137,"category":{"id":2,"name":"Food"},"amount":"9.5432","note":"Hey! i\'m testing this api"}'
+```
+----
+
+### Transactions
+Returns all the transactions for the current user in all wallets
+
+It's the representation of the Transaction model on **wallet/models.py**
+
+Api response example:
+
+**GET api/v1/transactions**
+```
+HTTP 200 OK
+Content-Type: application/json
+Vary: Accept
+Allow: GET, POST, HEAD, OPTIONS
+
+{
+    "count": 2, 
+    "next": null, 
+    "previous": null, 
+    "results": [
+        {
+            "id": 88, 
+            "item": {
+                "id": 134, 
+                "category": {
+                    "id": 41, 
+                    "name": "Freelance Work"
+                }, 
+                "amount": "120.0000", 
+                "note": "Bugfix", 
+                "pending": false
+            }, 
+            "wallet": {
+                "id": 8, 
+                "name": "Bank account", 
+                "initial_amount": "500.0000", 
+                "note": "My first account"
+            }, 
+            "date": "2015-03-14"
+        }, 
+        {
+            "id": 89, 
+            "item": {
+                "id": 135, 
+                "category": {
+                    "id": 2, 
+                    "name": "Food"
+                }, 
+                "amount": "-50.0000", 
+                "note": "Dinner", 
+                "pending": false
+            }, 
+            "wallet": {
+                "id": 8, 
+                "name": "Bank account", 
+                "initial_amount": "500.0000", 
+                "note": "My first account"
+            }, 
+            "date": "2015-03-14"
+        }
+    ]
+}
+```
+For more info on this endpoint check [http://127.0.0.1:8000/api/v1/transactions/](http://127.0.0.1:8000/api/v1/transactions/)
