@@ -98,7 +98,7 @@ Ok. This is great but we can get a nicer representation by just using our browse
 
 Open [http://127.0.0.1:8000/api/v1/items/](http://127.0.0.1:8000/api/v1/items/)
 
-___Remember you need to be logged in. If you're not just, go to [website](http://127.0.0.1:8000/) or [admin area](http://127.0.0.1:8000/admin/) and login with user/pass: demo/demo and then return to the api url. Otherwise you'll get a nasty 500 error___
+___IMPORTANT: you need to be logged in. If you're not just, go to [website](http://127.0.0.1:8000/) or [admin area](http://127.0.0.1:8000/admin/) and login with user/pass: demo/demo and then return to the api url. Otherwise you'll get a nasty 500 error___
 
 Api Html Response example:
 
@@ -227,11 +227,12 @@ ___IMPORTANT: You need to be logged in. If you're not, read the [Login](#login) 
 ```
 
 Once it's open:
+
 ```
 from django.test import Client
 c = Client()
 data = {'category_id':2, 'amount': 9.5432, 'note':"Hey! i'm testing this api"}
-r = c.post('/api/v1/items/')
+r = c.post('/api/v1/items/', data)
 ```
 
 Try `r.status_code`, it should return `201` if the item was created.
@@ -241,68 +242,72 @@ To access the data returned by the api type `r.content`, it should return someth
 ```
 '{"id":137,"category":{"id":2,"name":"Food"},"amount":"9.5432","note":"Hey! i\'m testing this api"}'
 ```
-----
 
-### Transactions
-Returns all the transactions for the current user in all wallets
+### PUT
 
-It's the representation of the Transaction model on **wallet/models.py**
+To edit an existing item just send a PUT to the url **/api/v1/items/PK* with following json structure:
 
-Api response example:
+```
+{
+    "category_id": INTEGER, 
+    "amount": DECIMAL, 
+    "note": STRING
+}
+```
 
-**GET api/v1/transactions**
+Let's examine one of the items. Open your browser at [http://127.0.0.1:8000/api/v1/items/134/](http://127.0.0.1:8000/api/v1/items/134/)
+
+___IMPORTANT: you need to be logged in. If you're not just, go to [website](http://127.0.0.1:8000/) or [admin area](http://127.0.0.1:8000/admin/) and login with user/pass: demo/demo and then return to the api url. Otherwise you'll get a nasty 500 error___
+
+You should see this:
+
 ```
 HTTP 200 OK
 Content-Type: application/json
 Vary: Accept
-Allow: GET, POST, HEAD, OPTIONS
+Allow: GET, PUT, PATCH, DELETE, HEAD, OPTIONS
 
 {
-    "count": 2, 
-    "next": null, 
-    "previous": null, 
-    "results": [
-        {
-            "id": 88, 
-            "item": {
-                "id": 134, 
-                "category": {
-                    "id": 41, 
-                    "name": "Freelance Work"
-                }, 
-                "amount": "120.0000", 
-                "note": "Bugfix", 
-                "pending": false
-            }, 
-            "wallet": {
-                "id": 8, 
-                "name": "Bank account", 
-                "initial_amount": "500.0000", 
-                "note": "My first account"
-            }, 
-            "date": "2015-03-14"
-        }, 
-        {
-            "id": 89, 
-            "item": {
-                "id": 135, 
-                "category": {
-                    "id": 2, 
-                    "name": "Food"
-                }, 
-                "amount": "-50.0000", 
-                "note": "Dinner", 
-                "pending": false
-            }, 
-            "wallet": {
-                "id": 8, 
-                "name": "Bank account", 
-                "initial_amount": "500.0000", 
-                "note": "My first account"
-            }, 
-            "date": "2015-03-14"
-        }
-    ]
+    "id": 134, 
+    "category": {
+        "id": 41, 
+        "name": "Freelance Work"
+    }, 
+    "amount": "120.0000", 
+    "note": "Bugfix"
 }
 ```
-For more info on this endpoint check [http://127.0.0.1:8000/api/v1/transactions/](http://127.0.0.1:8000/api/v1/transactions/)
+
+The PUT method work just like the POST method, but instead of creating the item it will update an existing one. For more information read the [POST](#post) documentation.
+
+Let's try to edit this item using the api. We can try it on our browser, using the form that Django Rest Framework gives us, or using a python shell like this:
+
+Open a python console
+
+___IMPORTANT: You need to be logged in. If you're not, read the [Login](#login) steps and then come back___
+
+```
+./shell_local_server.sh
+```
+
+Once it's open
+
+```
+from django.test import Client
+import json
+c = Client()
+data = {'category_id':41, 'amount': 119.99, 'note':"Hey! i'm edit this item with the API"}
+data = json.dumps(data)
+r = c.put('/api/v1/items/134/', data, content_type='application/json')
+```
+
+Try `r.status_code`, it should return `200` if the item was updated.
+
+To access the data returned by the api type `r.content`, it should return something like
+
+```
+'{"id":134,"category":{"id":41,"name":"Freelance Work"},"amount":"119.9900","note":"Hey! i\'m edit this item with the API"}'
+```
+
+----
+
