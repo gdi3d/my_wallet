@@ -7,4 +7,8 @@ site_url: gdi3d.github.io/my_wallet
 pages:
 - ['index.md', 'Home']
 - ['getting-started.md', 'Quick Start', 'Getting Started']
-- ['working-with-the-api.md', 'API', 'API']
+- ['api-overview.md', 'API', 'Overview']
+- ['api-login.md', 'API', 'Login']
+- ['api-registration.md', 'API', 'Registration']
+- ['api-reset-password.md', 'API', 'Reset Password']
+- ['api-transactions.md', 'API', 'Transactions']

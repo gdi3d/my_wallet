@@ -1,3 +1,6 @@
 *.pyc
 *.sublime*
 docs/site
+
+# prevent commiting db changes
+db.sqlite3
