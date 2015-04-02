@@ -4,6 +4,10 @@ This endpoint it's the representation of the **Transaction** model found in **[w
 
 [http://127.0.0.1:8000/api/v1/transactions/](http://127.0.0.1:8000/api/v1/transactions/)
 
+There's another endpoint for transactions that will return the total amount for a transaction set.
+
+[http://127.0.0.1:8000/api/v1/transactions-total/](http://127.0.0.1:8000/api/v1/transactions-total/)
+
 ## Methods
 
 * [GET](#get)

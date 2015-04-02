@@ -97,15 +97,15 @@ class TransactionTotalViewSet(generics.RetrieveAPIView):
 
     Filters:
 
-    * **api/v1/transactions/?wallet=WALLET_ID**
+    * **api/v1/transactions-total/?wallet=WALLET_ID**
 
-    * **api/v1/transactions/?note=STRING**  
+    * **api/v1/transactions-total/?note=STRING**  
     Search items on transactions that has STRING on note property
 
-    * **api/v1/transactions/?category=STRING**  
+    * **api/v1/transactions-total/?category=STRING**  
     Search items on transactions that belong to a category that has STRING on name property
 
-    * **api/v1/transactions/?category_id=CATEGORY_ID**  
+    * **api/v1/transactions-total/?category_id=CATEGORY_ID**  
     Search items on transactions that belongs to the specified CATEGORY_ID. If you want to choose multiple categories
     set the ids separated by a comma like category_id=1,2,3
     """

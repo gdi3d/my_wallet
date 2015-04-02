@@ -4,6 +4,13 @@ This endpoint it's the representation of the **Wallet** model found in **[wallet
 
 [http://127.0.0.1:8000/api/v1/wallet/](http://127.0.0.1:8000/api/v1/wallet/)
 
+There's also another endpoint that will return the total (the sum of all of transactions) of each wallet.
+
+If you wish to know the balance of that wallet you need to sum the **initial_amount** for each wallet.
+
+[http://127.0.0.1:8000/api/v1/wallet-total/](http://127.0.0.1:8000/api/v1/wallet-total/)
+
+
 ## Methods
 
 * [GET](#get)
