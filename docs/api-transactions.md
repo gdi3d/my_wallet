@@ -1,16 +1,15 @@
-# Transactions
+# Overview
 
-This endpoint it's the representation of the **Transaction** model found in **wallet/models.py**
+This endpoint it's the representation of the **Transaction** model found in **[wallet/models.py](https://github.com/gdi3d/my_wallet/blob/master/wallet/models.py)**
 
 [http://127.0.0.1:8000/api/v1/transactions/](http://127.0.0.1:8000/api/v1/transactions/)
 
 ## Methods
 
-* GET
-* POST
-* PUT
-* DEL
-* OPTIONS
+* [GET](#get)
+* [POST](#post)
+* [PUT](#put)
+* [DELETE](#delete)
 
 You can try out all this methods using your browsing. Just open the url from above. Just remember to be logged in first.
 
@@ -63,7 +62,7 @@ Send a POST request to [http://127.0.0.1:8000/api/v1/transactions/](http://127.0
 }
 ```
 
-It will return a **201** status code if the item was created. And the created object like this:
+It will return a **201** status code if the transaction was created. And the created object like this:
 
 ```
 {
@@ -101,7 +100,7 @@ Send a PUT request to [http://127.0.0.1:8000/api/v1/transactions/ID/](http://127
 }
 ```
 
-It will return a **200** status code if the item was updated. And the updated object:
+It will return a **200** status code if the transaction was updated. And the updated object:
 
 ```
 {
@@ -121,3 +120,13 @@ It will return a **200** status code if the item was updated. And the updated ob
 	"id": 1
 }
 ```
+
+### DELETE
+
+Send a DELETE request to [http://127.0.0.1:8000/api/v1/transactions/ID/](http://127.0.0.1:8000/api/v1/transactions/ID/)
+
+It will return a **204** status code if the transaction was deleted
+
+## Tests
+
+You can read the test code at **[wallet/tests.py](https://github.com/gdi3d/my_wallet/blob/master/wallet/tests.py)**. Just take a look at the TestCase **TransactionTestCase**

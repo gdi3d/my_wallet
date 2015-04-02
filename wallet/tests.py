@@ -179,7 +179,6 @@ class CategoryTestCase(TestCase):
         # validate returned data
         self.assertJSONEqual(json.dumps(r.data), json.dumps(data))
 
-
 class TransactionTestCase(TestCase):
 
     def setUp(self):

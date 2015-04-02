@@ -12,3 +12,5 @@ pages:
 - ['api-registration.md', 'API', 'Registration']
 - ['api-reset-password.md', 'API', 'Reset Password']
 - ['api-transactions.md', 'API', 'Transactions']
+- ['api-wallets.md', 'API', 'Wallets']
+- ['api-category.md', 'API', 'Categories']
