@@ -100,7 +100,7 @@ w =
 
 				if(!$('#'+k+w.error_id).length)
 				{
-					if($(':input[name="'+k+'"]').parent().hasClass('form-group'))
+					if($(':input[name="'+k+'"]').parent().hasClass('input-group'))
 					{						
 						$(':input[name="'+k+'"]').parent().after(w.error_placeholder)
 						$(':input[name="'+k+'"]').parent().next('div').attr('id', k+w.error_id);
