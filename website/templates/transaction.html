@@ -24,7 +24,11 @@
 		        	<select name="category" id="category" class="form-control" data-bind="options: categories, value: item.category.id, optionsText: 'name', optionsValue:'id', optionsCaption: 'Category?...'">
 	        		</select>
 		       	</div>
-
+				
+				<div class="form-group">
+		        	<label for="category">Tags</label>
+		        	<input type="text" class="form-control" name="tags" id="tags" data-bind="textInput: item.tags">
+		       	</div>
 
 	            <label>Date</label>
 		       	<div class="form-group input-group">

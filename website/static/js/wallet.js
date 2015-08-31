@@ -256,6 +256,11 @@ w.alert =
     }
 };
 
+function tagModel(tag) {
+	var self = this
+	return self.tag
+}
+
 /**
  * Transaction view
  *
@@ -278,20 +283,29 @@ w.transaction_view =
 
 			w.category_view._categories_list(function(categories)
 			{
+				// set the tags as comma separated
+				var tags = new Array()
+				var mapping = {'tags': {
+						create: function(options) { 
+							return options.data.name	
+						}
+					}
+				}
+
 				// defines the view object model
 				w.transaction_view.model = ko.mapping.fromJS(
 				{
 					'item': {
-						'amount':null, 'note': '', 'id': '', 'category': {'id': 0}
+						'amount':null, 'note': '', 'id': '', 'category': {'id': 0}, 'tags': tags
 					},
 					'id': '',
 					'date': '',
 					'wallet': {'id':''},
 					'wallets': w.transaction_view._wallets,
-					'categories': categories,
-				});
-
-				ko.applyBindings(w.transaction_view.model);				
+					'categories': categories
+				}, mapping);
+				
+				ko.applyBindings(w.transaction_view.model);
 				
 				// load a transaction to be edited
 				if(typeof id !== 'undefined' && id !== '')
@@ -303,6 +317,36 @@ w.transaction_view =
 					// if there's only one wallet, let's autoselect it					
 					w.transaction_view.model.wallet.id(w.transaction_view.model.wallets()[0].id())
 				}
+
+				// activate bootstrap-tokenfield plugin
+				// timeout works as ugly hacks to make sure
+				// all the tags are loaded into the input before
+				// calling plugin
+				setTimeout(function(){
+					var engine = new Bloodhound({
+					 	remote: {
+	    					url: '/api/v1/tags?q=%QUERY',
+						  	filter: function(response){
+						  		tags = []
+						  		$.map(response.results, function(v){
+						  			tags.push({'value': v.name})
+						  		});
+						  		
+						  		return tags		
+						  	}
+	    				},				 	
+						datumTokenizer: function(d) {						
+							return Bloodhound.tokenizers.whitespace(d.value);
+						},
+						queryTokenizer: Bloodhound.tokenizers.whitespace
+					});
+
+					engine.initialize();
+
+					$('#tags').tokenfield({
+						typeahead: [null, { source: engine.ttAdapter() }]
+					});
+				},80)
 			})						
 		});		
 
@@ -395,7 +439,8 @@ w.transaction_view =
 				'amount': w.transaction_view.model.item.amount(),
 				'category_id': category_id,
 				'note': w.transaction_view.model.item.note(),
-				'id': w.transaction_view.model.item.id()
+				'id': w.transaction_view.model.item.id(),
+				'tags_write': w.transaction_view.model.item.tags()
 			},			
 			'date': w.transaction_view.model.date(),
 			'wallet_id': wallet_id,

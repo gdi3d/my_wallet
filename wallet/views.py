@@ -11,9 +11,9 @@ from rest_framework import generics
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 
-from wallet.serializers import ItemSerializer, TransactionSerializer, CategorySerializer, WalletSerializer, FavoriteItemSerializer, WalletTotalSerializer, TransactionsTotalSerializer
+from wallet.serializers import ItemSerializer, TransactionSerializer, CategorySerializer, WalletSerializer, WalletTotalSerializer, TransactionsTotalSerializer, TagSerializer
 
-from wallet.models import Item, Transaction, Category, Wallet, FavoriteItem
+from wallet.models import Item, Transaction, Category, Wallet, Tag
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
@@ -31,19 +31,6 @@ class ItemViewSet(viewsets.ModelViewSet):
 
         user = self.request.user
         return Item.objects.filter(transaction__wallet__user=user)
-        
-
-class FavoriteItemViewSet(viewsets.ModelViewSet):
-    """
-    A simple ViewSet for viewing and editing accounts.
-    """
-    serializer_class = FavoriteItemSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-    def get_queryset(self):
-
-        user = self.request.user
-        return FavoriteItem.objects.filter(user=user)
 
 class TransactionViewSet(viewsets.ModelViewSet):
     """
@@ -202,4 +189,20 @@ class WalletTotalViewSet(viewsets.ReadOnlyModelViewSet):
 
         return total
 
+class TagsViewSet(viewsets.ModelViewSet):
+
+    serializer_class = TagSerializer
+    permission_classes = permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def get_queryset(self):
+
+        search = self.request.GET.get('q')
+
+        user = self.request.user
+        tag = Tag.objects.filter(user=user)
         
+        if search:
+            tag = tag.filter(name__icontains=search)
+
+        return tag
+

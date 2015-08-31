@@ -31,14 +31,22 @@ class Wallet(models.Model):
 	def __str__(self):
 		return self.name
 
+class Tag(models.Model):
+	user = models.ForeignKey(User)
+	name = models.CharField(_('Name'), max_length=75)
+
+	def __unicode__(self):
+		return self.name
+
 class AbstractItem(models.Model):
 
 	amount = models.DecimalField(_('Amount'), max_digits=12, decimal_places=4)
 	note = models.TextField(blank=True)
 	pending = models.BooleanField(default=False)
 	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
+	tags = models.ManyToManyField(Tag, related_name='item_tags', null=True, blank=True)
 
-	class Meta:		
+	class Meta:
 		abstract = True
 
 	def __str__(self):
@@ -48,17 +56,7 @@ class Item(AbstractItem):
 
 	class Meta:
 		verbose_name = _("Item")
-		verbose_name_plural = _("Items")
-	
-
-class FavoriteItem(AbstractItem):
-
-	user = models.ForeignKey(User)	
-
-	class Meta:
-		verbose_name = _("Favorite Item")
-		verbose_name_plural = ("Favorite Items")	
-	
+		verbose_name_plural = _("Items")	
 
 class Transaction(models.Model):
 
@@ -72,6 +70,7 @@ class Transaction(models.Model):
 
 	def __str__(self):
 		return '$ %s (%s)' % (self.item.amount, self.item.category)
+
 
 class WalletHistory(object):
 	pass

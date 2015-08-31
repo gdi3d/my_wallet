@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>My Wallet</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
@@ -19,6 +19,8 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{% static "css/datepicker3.css" %}" rel="stylesheet">
     <link href="{% static "css/simplePagination.css" %}" rel="stylesheet">
+    <link href="{% static "css/bootstrap-tokenfield.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/tokenfield-typeahead.min.css" %}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -31,6 +33,7 @@
     .main-content { padding: 20px 15px 40px; }
     .main-btn {font-size: 2em}
     .clickme{cursor: pointer;}
+    #transaction_form .token-input { left: -11px; top: -7px;}
     </style>
   </head>
 
@@ -90,6 +93,9 @@
     <script src="{% static "js/jquery.numeric.min.js" %}"></script>
     <script src="{% static "js/jquery.simplePagination.js" %}"></script>
     <script src="{% static "js/accounting.min.js" %}"></script>
+    <script src="{% static "js/bootstrap-tokenfield.min.js" %}"></script>
+    <script src="{% static "js/typeahead.bundle.min.js" %}"></script>
+    
     <script type="text/javascript">
       $('#logout').click(function(){ w.dashboard_view.logout() });
     </script>
