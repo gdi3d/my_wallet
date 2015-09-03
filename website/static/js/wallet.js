@@ -12,7 +12,7 @@ w =
 	 * @param  {Function} 	callback Callback
 	 * 
 	 */
-	ajax: function(url, type, data, callback) {
+	ajax: function(url, type, data, callback, form_id) {
 		
 		$.ajax({
 			'url': url,
@@ -49,7 +49,7 @@ w =
 	        statusCode: {
 	        	400: function(XMLHttpRequest)
 	        	{	        		
-	        		w.show_form_error(XMLHttpRequest.responseJSON)
+	        		w.show_form_error(XMLHttpRequest.responseJSON, form_id)
 	        	}
 	        }
 
@@ -88,10 +88,19 @@ w =
 	 * Show the errors from the api on the forms
 	 * @param  {object} data The response from the api
 	 */
-	show_form_error: function(data)
+	show_form_error: function(data, form_id)
 	{
 		if(data)
 		{
+			if(form_id != 'undefined' || form_id != '')
+			{
+				form_id = '#' + form_id + ' '
+			}
+			else
+			{
+				form_id = ''
+			}
+
 			// convert the response into a mapped array
 			w.recursiveIteration(data)
 			for(var k in w.api_response_fields)
@@ -100,20 +109,19 @@ w =
 
 				if(!$('#'+k+w.error_id).length)
 				{
-					if($(':input[name="'+k+'"]').parent().hasClass('input-group'))
+					if($(form_id + ':input[name="'+k+'"]').parent().hasClass('input-group'))
 					{						
-						$(':input[name="'+k+'"]').parent().after(w.error_placeholder)
-						$(':input[name="'+k+'"]').parent().next('div').attr('id', k+w.error_id);
+						$(form_id + ':input[name="'+k+'"]').parent().after(w.error_placeholder)
+						$(form_id + ':input[name="'+k+'"]').parent().next('div').attr('id', k+w.error_id);
 					}
 					else
 					{
-						$(':input[name="'+k+'"]').after(w.error_placeholder);
-						$(':input[name="'+k+'"]').next('div').attr('id', k+w.error_id);
+						$(form_id + ':input[name="'+k+'"]').after(w.error_placeholder);
+						$(form_id + ':input[name="'+k+'"]').next('div').attr('id', k+w.error_id);
 					}
 				}
 
-				$(':input[name="'+k+'"]').parent().addClass('has-error');				
-				
+				$(form_id + ':input[name="'+k+'"]').parent().addClass('has-error');				
 				$('#'+k+w.error_id).html(v[0])
 			}			
 		}
@@ -848,6 +856,7 @@ function history_view_row(item, wallet, transaction)
 {
 	var self = this;
 	self.item = item;
+	self.item.tags = $.map(item.tags, function(val, i){ return ' '+val.name; })
 	self.wallet = wallet;
 	self.transaction = transaction;
 }
@@ -1007,16 +1016,23 @@ w.dashboard_view =
 		// Get the wallet's total
 		$.getJSON("/api/v1/wallet-total/", function(data)
 		{
-			// create the wallet total objects
-	        var mapped_wallet = $.map(data.results, function(v) 
-	        {
-	        	var total = Number(v.wallet.initial_amount) + Number(v.total)
-	        	total = w.format_number(total);
+			if(data.count > 0)
+			{
+				// create the wallet total objects
+		        var mapped_wallet = $.map(data.results, function(v) 
+		        {
+		        	var total = Number(v.wallet.initial_amount) + Number(v.total)
+		        	total = w.format_number(total);
 
-	        	return new dashboard_view_wallet_widget_row(v.wallet, total) 
-	        });
+		        	return new dashboard_view_wallet_widget_row(v.wallet, total) 
+		        });
 
-	        w.dashboard_view.wallets_rows(mapped_wallet);
+		        w.dashboard_view.wallets_rows(mapped_wallet);
+			}
+			else
+			{
+				$('#no_wallets').fadeIn('fast');
+			}
 	    });	    
 	},
 	/**
@@ -1098,5 +1114,52 @@ w.home_view =
 	    });
 
 	    $('#link_what_is_it').click(function() { $('#what_is_it').slideToggle() });
+	    $('#create_account').click(function(){  });
+
+	    $('#form_register').submit(function(e){ 
+			w.home_view.register();
+			$('#create_account').button('loading');
+			 event.preventDefault();
+		});
+
+
+	},
+	register: function()
+	{
+		var callback =
+		{
+			success: function(data, textStatus)
+			{				
+				$('#register_result').hide()
+					.removeClass('text-danger')
+					.addClass('text-success')
+					.html('Account created!<br>Log in now!')
+					.fadeIn('fast');
+
+				$('#create_account').button('reset');
+
+				setTimeout(function(){ $('.btn_back_login').click() }, 2300);
+				$('#form_register')[0].reset();
+			},
+			error: function(data)
+			{
+				$('#register_result')
+					.hide()
+					.addClass('text-danger')
+					.html('Try again :)')
+					.fadeIn('fast');
+				$('#create_account').button('reset');
+			}
+		}
+
+		data = {
+			'username': $('#reg_username').val(),
+			'password1': $('#reg_password1').val(),
+			'password2': $('#reg_password2').val(),
+			'email': $('#reg_email').val(),
+			'csrf': $('input[name="csrf"]').val()
+		}
+
+		w.ajax('/api/v1/rest-auth/registration/', 'POST', JSON.stringify(data), callback, 'form_register')
 	}
 }

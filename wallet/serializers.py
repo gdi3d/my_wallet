@@ -44,8 +44,10 @@ class TransactionSerializer(serializers.ModelSerializer):
 	def create(self, validated_data):
 
 		item_data = validated_data.pop('item')
+		tags = self.check_tags(item_data.pop('tags_write'))
 		item = Item.objects.create(**item_data)
-		item.tags = self.check_tags(item_data['tags_write'])
+		item.tags = tags
+		item.save()
 
 		wallet = Wallet.objects.get(pk=validated_data.pop('wallet_id'))
 
@@ -77,7 +79,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 		"""
 		Check the tags and created if they don't exists
 		"""
-		if tags:
+		if tags is not None:
 			tags_list = list()
 			for t in tags.split(','):
 				t = t.strip()

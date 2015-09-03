@@ -26,10 +26,10 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = (
+    'django.contrib.sites',
     'suit',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,6 +40,9 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
     # custom apps
     'wallet',
     'api',
@@ -84,6 +87,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+SITE_ID = 1
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -98,3 +102,12 @@ REST_FRAMEWORK = {
 }
 
 LOGIN_URL = '/'
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',    
+)
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'

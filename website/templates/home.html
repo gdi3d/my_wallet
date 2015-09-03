@@ -114,14 +114,18 @@
                     </div>
 
                     <div class="panel-body" id="register" style="display:none">
-                        <form accept-charset="UTF-8" role="form" class="form-signin">
+                        <form accept-charset="UTF-8" role="form" class="form-signin" id="form_register">
                             <fieldset>
                                 <label class="panel-login">
-                                    <div class="login_result"></div>
+                                    <div id="register_result"></div>
                                 </label>
-                                <input class="form-control" placeholder="Username" id="username" type="text">
-                                <input class="form-control" placeholder="Password" id="password" type="password">
-                                <button type="submit" class="btn btn-lg btn-danger btn-block">Register</button>
+                                <input class="form-control" placeholder="Email" id="reg_email" type="text" name="email">
+                                <input class="form-control" placeholder="Username" id="reg_username" name="username" type="text">
+                                <input class="form-control" placeholder="Password" id="reg_password1" type="password" name="password1">
+                                <input class="form-control" placeholder="Confirm Password" id="reg_password2" type="password" name="password2">
+                                <!-- password don't match -->
+                                <p id="__all___error_placeholder" class="text-danger"></p> 
+                                <button type="submit" class="btn btn-lg btn-danger btn-block" id="create_account">Register</button>
                                 <p><a href="#" class="btn btn-link btn_back_login"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Back to login</a></p>
                                 
                             </fieldset>
@@ -134,7 +138,7 @@
                                 <label class="panel-login">
                                     <div class="login_result"></div>
                                 </label>
-                                <input class="form-control" placeholder="Username" id="username" type="text">
+                                <input class="form-control" placeholder="Email address" id="email" type="text">
                                 <button type="submit" class="btn btn-lg btn-info btn-block">Reset</button>
                                 <p><a href="#" class="btn btn-link btn_back_login"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Back to login</a></p>
                                 
