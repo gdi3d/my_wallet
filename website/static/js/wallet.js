@@ -122,7 +122,7 @@ w =
 				}
 
 				$(form_id + ':input[name="'+k+'"]').parent().addClass('has-error');				
-				$('#'+k+w.error_id).html(v[0])
+				$(form_id + '#'+k+w.error_id).html(v[0])
 			}			
 		}
 	},
