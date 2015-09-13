@@ -292,10 +292,10 @@ w.transaction_view =
 			w.category_view._categories_list(function(categories)
 			{
 				// set the tags as comma separated
-				var tags = new Array()
+				var tags = []
 				var mapping = {'tags': {
 						create: function(options) { 
-							return options.data.name	
+							return options.data.name
 						}
 					}
 				}
@@ -327,7 +327,7 @@ w.transaction_view =
 				}
 
 				// activate bootstrap-tokenfield plugin
-				// timeout works as ugly hacks to make sure
+				// timeout works as an ugly hack to make sure
 				// all the tags are loaded into the input before
 				// calling plugin
 				setTimeout(function(){
@@ -448,7 +448,7 @@ w.transaction_view =
 				'category_id': category_id,
 				'note': w.transaction_view.model.item.note(),
 				'id': w.transaction_view.model.item.id(),
-				'tags_write': w.transaction_view.model.item.tags()
+				'tags_write': $('#tags').tokenfield('getTokensList')
 			},			
 			'date': w.transaction_view.model.date(),
 			'wallet_id': wallet_id,
@@ -1016,24 +1016,25 @@ w.dashboard_view =
 		// Get the wallet's total
 		$.getJSON("/api/v1/wallet-total/", function(data)
 		{
-			if(data.count > 0)
-			{
-				// create the wallet total objects
-		        var mapped_wallet = $.map(data.results, function(v) 
-		        {
-		        	var total = Number(v.wallet.initial_amount) + Number(v.total)
-		        	total = w.format_number(total);
+			// create the wallet total objects
+	        var mapped_wallet = $.map(data.results, function(v) 
+	        {
+	        	var total = Number(v.wallet.initial_amount) + Number(v.total)
+	        	total = w.format_number(total);
 
-		        	return new dashboard_view_wallet_widget_row(v.wallet, total) 
-		        });
+	        	return new dashboard_view_wallet_widget_row(v.wallet, total) 
+	        });
 
-		        w.dashboard_view.wallets_rows(mapped_wallet);
-			}
-			else
+	        w.dashboard_view.wallets_rows(mapped_wallet);			
+	    });
+
+	    $.getJSON("/api/v1/wallet/", function(data)
+		{
+			if(data.count == 0)
 			{
 				$('#no_wallets').fadeIn('fast');
 			}
-	    });	    
+		});	    
 	},
 	/**
 	 * Logout the user

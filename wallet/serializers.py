@@ -79,21 +79,22 @@ class TransactionSerializer(serializers.ModelSerializer):
 		"""
 		Check the tags and created if they don't exists
 		"""
-		if tags is not None:
+		if tags:
 			tags_list = list()
 			for t in tags.split(','):
 				t = t.strip()
-				# check if tag exists
-				try:
-					t = Tag.objects.get(name=t)
-				except Tag.DoesNotExist:
-					# create the tag
-					t = Tag.objects.create(name=t, user=self.context['request'].user)
-				
-				tags_list.append(t)
+				if t:
+					# check if tag exists
+					try:
+						t = Tag.objects.get(name=t)
+					except Tag.DoesNotExist:
+						# create the tag
+						t = Tag.objects.create(name=t, user=self.context['request'].user)
+					
+					tags_list.append(t)
 
 			return tags_list
-		return None
+		return list()
 
 class TransactionsTotalSerializer(serializers.Serializer):
 	
