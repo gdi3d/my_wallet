@@ -1,31 +1,31 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="row" id="main_content">
-	<div class="col-lg-12">
-		<form class="form-inline">
-			
-			<div class="form-group">
+	<form class="form-inline">
+		<div class="row">
+			<div class="col-md-2">
 				<select name="categories" id="categories" multiple class="form-control" data-bind="options: categories, optionsText: 'name', optionsValue:'id', optionsCaption: 'All Categories', value: ''">
 				</select>
 			</div>
 
-			<div class="form-group">
+			<div class="col-md-2">
 				<label class="checkbox-inline">
 				  <input type="checkbox" id="income" value="1" checked> Income
 				</label>
-
+				<br>
 				<label class="checkbox-inline">
 				  <input type="checkbox" id="outcome" value="1" checked> Outcome
 				</label>
 			</div>
 
-			<div class="form-group">
+			<div class="col-md-6">
 				<input type="text" class="form-control" id="q" placeholder="Search...">
+				<p class="help-block"><small>use comma for multiple terms</small></p>
 			</div>
-
-		</form>	
-		<hr/>
-	</div>
+		</div>
+	</form>
+	
+	<hr/>
 
 	<div class="col-lg-12">
 		<table class="table table-hover table-condensed table-responsive" id="transactions_history">
@@ -39,7 +39,7 @@
 				<th>Wallet</th>
 			</thead>
 			<tbody data-bind="foreach: rows">
-				<tr>
+				<tr data-bind="css: item.css_class">
 					<td>
 						<a data-bind="attr: {href: '/money/edit/' + transaction.id}"><i class="fa fa-pencil"></i></a>&nbsp;
 						<a data-bind="click: function(data, event) {w.history_view.del(data)}" class="clickme"><i class="fa fa-remove"></i></a>

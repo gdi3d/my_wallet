@@ -17,6 +17,8 @@ from wallet.models import Item, Transaction, Category, Wallet, Tag
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
+import operator
+
 # Create your views here.
 class ItemViewSet(viewsets.ModelViewSet):
     """
@@ -65,7 +67,19 @@ class TransactionViewSet(viewsets.ModelViewSet):
     		transactions = transactions.filter(wallet = wallet)
 
         if string:
-            transactions = transactions.filter(Q(item__note__icontains = string) | Q(item__category__name__icontains = string) | Q(item__tags__name__icontains = string))
+            # search multiple terms
+            if ',' in string:
+                string = [s.strip() for s in string.split(',')]
+                
+                notes = reduce(operator.or_, (Q(item__note__icontains = s) for s in string))
+                category = reduce(operator.or_, (Q(item__category__name__icontains = s) for s in string))
+                tags = reduce(operator.or_, (Q(item__tags__name__icontains = s) for s in string))
+
+                transactions = transactions.filter(notes | category | tags)
+
+            else:
+            
+                transactions = transactions.filter(Q(item__note__icontains = string) | Q(item__category__name__icontains = string) | Q(item__tags__name__icontains = string))
 
         if category_id:
             category_id = category_id.split(',')
@@ -77,7 +91,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
         if outcome and not income:
             transactions = transactions.filter(item__amount__lt = 0)
 
-    	return transactions
+
+    	return transactions.order_by('-date')
 
 class TransactionTotalViewSet(generics.RetrieveAPIView):
     """
@@ -114,7 +129,19 @@ class TransactionTotalViewSet(generics.RetrieveAPIView):
             transactions = transactions.filter(wallet = wallet)
 
         if string:
-            transactions = transactions.filter(Q(item__note__icontains = string) | Q(item__category__name__icontains = string) | Q(item__tags__name__icontains = string))
+            # search multiple terms
+            if ',' in string:
+                string = [s.strip() for s in string.split(',')]
+                
+                notes = reduce(operator.or_, (Q(item__note__icontains = s) for s in string))
+                category = reduce(operator.or_, (Q(item__category__name__icontains = s) for s in string))
+                tags = reduce(operator.or_, (Q(item__tags__name__icontains = s) for s in string))
+
+                transactions = transactions.filter(notes | category | tags)
+
+            else:
+            
+                transactions = transactions.filter(Q(item__note__icontains = string) | Q(item__category__name__icontains = string) | Q(item__tags__name__icontains = string))
 
         if category_id:
             category_id = category_id.split(',')

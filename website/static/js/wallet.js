@@ -917,7 +917,8 @@ w.history_view =
 			// crate an array of rows object			
 	        var mapped_row = $.map(data.results, function(v) 
 	        {
-	        	v.item.amount = w.format_number(v.item.amount)        	
+	        	v.item.css_class = (v.item.amount > 0)?'text-success':'text-danger';
+	        	v.item.amount = w.format_number(v.item.amount);
 	        	return new history_view_row(v.item, v.wallet, {'date': v.date, 'id': v.id});
 	        });
 	        
