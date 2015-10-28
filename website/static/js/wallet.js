@@ -944,11 +944,11 @@ w.history_view =
 		{
 			if(data.total > 0)
 			{
-				$('#total').parent().addClass('text-info')
+				$('#total').parent().addClass('text-info').removeClass('text-danger');
 			}
 			else
 			{
-				$('#total').parent().addClass('text-danger')
+				$('#total').parent().addClass('text-danger').removeClass('text-info');
 			}
 
 			var total = w.format_number(data.total, true);
