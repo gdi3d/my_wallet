@@ -17,7 +17,7 @@ class Category(models.Model):
 	def __str__(self):
 		return self.name
 	
-class Wallet(models.Model):	
+class Wallet(models.Model):
 
 	user = models.ForeignKey(User)
 	name = models.CharField(max_length=255)
@@ -39,7 +39,6 @@ class Tag(models.Model):
 		return self.name
 
 class AbstractItem(models.Model):
-
 	amount = models.DecimalField(_('Amount'), max_digits=12, decimal_places=4)
 	note = models.TextField(blank=True)
 	pending = models.BooleanField(default=False)

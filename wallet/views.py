@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.db import transaction
 from django.core import serializers
-from django.db.models import Sum
+from django.db.models import Sum, Q
 import django_filters
 
 from rest_framework import filters
@@ -40,11 +40,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     * **api/v1/transactions/?wallet=WALLET_ID**
 
-    * **api/v1/transactions/?note=STRING**  
-    Search items on transactions that has STRING on note property
-
-    * **api/v1/transactions/?category=STRING**  
-    Search items on transactions that belong to a category that has STRING on name property
+    * **api/v1/transactions/?string=STRING**  
+    Search items on transactions that has STRING on note or category property
 
     * **api/v1/transactions/?category_id=CATEGORY_ID**  
     Search items on transactions that belongs to the specified CATEGORY_ID. If you want to choose multiple categories
@@ -57,24 +54,28 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     	user = self.request.user
     	wallet = self.request.QUERY_PARAMS.get('wallet')
-        note = self.request.GET.get('note')
-        category = self.request.GET.get('category')
+        string = self.request.GET.get('string')
         category_id = self.request.GET.get('category_id')
+        income = self.request.GET.get('income')
+        outcome = self.request.GET.get('outcome')
 
     	transactions = Transaction.objects.filter(wallet__user=user)
 
     	if wallet:
     		transactions = transactions.filter(wallet = wallet)
 
-        if note:
-            transactions = transactions.filter(item__note__icontains = note)
-
-        if category:
-            transactions = transactions.filter(item__category__name__icontains = category)
+        if string:
+            transactions = transactions.filter(Q(item__note__icontains = string) | Q(item__category__name__icontains = string) | Q(item__tags__name__icontains = string))
 
         if category_id:
             category_id = category_id.split(',')
             transactions = transactions.filter(item__category__id__in = category_id)
+
+        if income and not outcome:
+            transactions = transactions.filter(item__amount__gt = 0)
+        
+        if outcome and not income:
+            transactions = transactions.filter(item__amount__lt = 0)
 
     	return transactions
 
@@ -86,7 +87,7 @@ class TransactionTotalViewSet(generics.RetrieveAPIView):
 
     * **api/v1/transactions-total/?wallet=WALLET_ID**
 
-    * **api/v1/transactions-total/?note=STRING**  
+    * **api/v1/transactions-total/?q=STRING**  
     Search items on transactions that has STRING on note property
 
     * **api/v1/transactions-total/?category=STRING**  
@@ -102,19 +103,28 @@ class TransactionTotalViewSet(generics.RetrieveAPIView):
 
         user = self.request.user
         wallet = self.request.QUERY_PARAMS.get('wallet')
-        note = self.request.GET.get('note')
-        category = self.request.GET.get('category')
+        string = self.request.GET.get('string')
+        category_id = self.request.GET.get('category_id')
+        income = self.request.GET.get('income')
+        outcome = self.request.GET.get('outcome')
 
         transactions = Transaction.objects.filter(wallet__user=user)
 
         if wallet:
             transactions = transactions.filter(wallet = wallet)
 
-        if note:
-            transactions = transactions.filter(item__note__icontains = note)
+        if string:
+            transactions = transactions.filter(Q(item__note__icontains = string) | Q(item__category__name__icontains = string) | Q(item__tags__name__icontains = string))
 
-        if category:
-            transactions = transactions.filter(item__category__name__icontains = category)
+        if category_id:
+            category_id = category_id.split(',')
+            transactions = transactions.filter(item__category__id__in = category_id)
+
+        if income and not outcome:
+            transactions = transactions.filter(item__amount__gt = 0)
+        
+        if outcome and not income:
+            transactions = transactions.filter(item__amount__lt = 0)
 
         transactions = transactions.aggregate(total=(Sum('item__amount')))
 

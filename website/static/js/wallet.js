@@ -1,3 +1,11 @@
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
 var w = {}
 /**
  * common functions
@@ -866,16 +874,34 @@ function history_view_row(item, wallet, transaction)
 w.history_view =
 {
 	rows: new Array(),
+	model: {},
+	filter: {},
 	/**
 	 * Initializate the view
 	 * @return {[type]} [description]
 	 */
 	init: function()
 	{		
-		w.history_view.rows = ko.observableArray([]);
-		ko.applyBindings(w.history_view);
-		
-		w.history_view.load(1);
+		w.category_view._categories_list(function(categories){
+			// defines the view object model			
+			w.history_view.model = ko.mapping.fromJS({
+				'categories': categories,
+				'rows': ko.observableArray([]),
+				'category_id': null
+			});
+			
+			ko.applyBindings(w.history_view.model);
+			w.history_view.load(1);
+		});
+
+		$('#categories, #income, #outcome').click(function(){
+			w.history_view.collect_filter();
+		});
+
+		$('#q').keyup(function(){
+			delay(function() { w.history_view.collect_filter(); }, 250);
+		});
+
 	},
 	/**
 	 * Load the records
@@ -883,8 +909,10 @@ w.history_view =
 	 */
 	load: function(page)
 	{
-		// get the records	
-		$.getJSON("/api/v1/transactions?page="+page+'&page_size='+w.history_view.page_size, function(data)
+		filter_string = $.param(w.history_view.filter);
+
+		// get the records
+		$.getJSON("/api/v1/transactions?page="+page+'&page_size='+w.history_view.page_size + '&' + filter_string, function(data)
 		{
 			// crate an array of rows object			
 	        var mapped_row = $.map(data.results, function(v) 
@@ -893,7 +921,7 @@ w.history_view =
 	        	return new history_view_row(v.item, v.wallet, {'date': v.date, 'id': v.id});
 	        });
 	        
-	        w.history_view.rows(mapped_row);
+	        w.history_view.model.rows(mapped_row);
 	        w.history_view.result_count = data.count;
 	        
 	        // load it if need it!
@@ -901,20 +929,18 @@ w.history_view =
 	        {
 	        	w.history_view.paginator();	        	
 	        }
-	    });
 
-		// TODO only call it on new search
-	    if(!$('#total').html().length)
-	    {
-	    	w.history_view.set_total()
-	    }
+	        w.history_view.set_total();
+	    });
 	},
 	/**
 	 * Get the history amount totals
 	 */
 	set_total: function()
 	{
-		$.getJSON("/api/v1/transactions-total", function(data)
+		filter_string = $.param(w.history_view.filter);
+
+		$.getJSON("/api/v1/transactions-total?" + filter_string, function(data)
 		{
 			if(data.total > 0)
 			{
@@ -984,6 +1010,22 @@ w.history_view =
 
 		// call the endpoint to delete the transaction
 		w.ajax('/api/v1/transactions/'+id, 'DELETE', {}, callback)
+	},
+	/**
+	 * Triggered when selecting a category from the dropdown
+	 * @param  {object} data 
+	 * @param  {object} event 
+	 */
+	collect_filter: function()
+	{
+		w.history_view.filter = {
+			'category_id': $('#categories').val().join(),
+			'income': ($('#income').prop('checked'))?'1':'',
+			'outcome': ($('#outcome').prop('checked'))?'1':'',
+			'string': $('#q').val()
+		}
+
+		w.history_view.load(1);
 	}
 }
 
