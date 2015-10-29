@@ -99,6 +99,10 @@ REST_FRAMEWORK = {
     'PAGINATE_BY': 50,                 # Default to 50
     'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
     'MAX_PAGINATE_BY': 500,            # Maximum limit allowed when using `?page_size=xxx`.
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
 }
 
 LOGIN_URL = '/'
@@ -111,3 +115,4 @@ AUTHENTICATION_BACKENDS = (
 )
 
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

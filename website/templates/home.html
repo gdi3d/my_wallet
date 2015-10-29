@@ -91,8 +91,9 @@
                           <center><button class="btn btn-link" id="link_what_is_it">What is it?&nbsp; <i class="fa fa-info-circle"></i></button></center>
                           <div id="what_is_it" style="display:none">
                                 <p>A small and simple income/outcome money app written in python using Django</p>
-                                <p>It's RESTful, and has a very simple interface to play with</p>
-                                <p><a href="#" target="_blank">Read more...</a></p>
+                                <p>It's RESTful, and has a very simple web interface to play with</p>
+                                <p>And it's open source, <a href="https://github.com/gdi3d/my_wallet">Get it here</a></p>
+                                <p><a href="http://gdi3d.github.io/my_wallet/" target="_blank">Read more...</a></p>
                           </div>
                         </div>
                     </div>
@@ -133,13 +134,13 @@
                     </div>
 
                     <div class="panel-body" id="reset_pass" style="display:none">
-                        <form accept-charset="UTF-8" role="form" class="form-signin">
+                        <form accept-charset="UTF-8" role="form" class="form-signin" id="form_reset">
                             <fieldset>
                                 <label class="panel-login">
-                                    <div class="login_result"></div>
+                                    <div id="reset_result"></div>
                                 </label>
-                                <input class="form-control" placeholder="Email address" id="email" type="text">
-                                <button type="submit" class="btn btn-lg btn-info btn-block">Reset</button>
+                                <input class="form-control" placeholder="Email address" id="rp_email" type="text">
+                                <button type="submit" class="btn btn-lg btn-info btn-block" id="reset_password">Reset</button>
                                 <p><a href="#" class="btn btn-link btn_back_login"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Back to login</a></p>
                                 
                             </fieldset>
@@ -148,7 +149,7 @@
 
                 </div>
                 <footer class="text-center">
-                    <a href="#"><i class="fa fa-github fa-2x"></i></a>                    
+                    <a href="https://github.com/gdi3d/my_wallet"><i class="fa fa-github fa-2x"></i></a>                    
                 </footer>
             </div>
         </div>

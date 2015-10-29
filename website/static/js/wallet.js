@@ -1166,6 +1166,12 @@ w.home_view =
 			 event.preventDefault();
 		});
 
+		$('#form_reset').submit(function(e){ 
+			w.home_view.reset_password();
+			$('#reset_password').button('loading');
+			 event.preventDefault();
+		});
+
 
 	},
 	register: function()
@@ -1205,5 +1211,38 @@ w.home_view =
 		}
 
 		w.ajax('/api/v1/rest-auth/registration/', 'POST', JSON.stringify(data), callback, 'form_register')
+	},
+	reset_password: function()
+	{
+		var callback =
+		{
+			success: function(data, textStatus)
+			{				
+				$('#reset_result').hide()
+					.removeClass('text-danger')
+					.addClass('text-success')
+					.html("Check your email and follow the instructions. Don't forget to check your spam folder too.")
+					.fadeIn('fast');
+
+				$('#reset_password').button('reset');
+				$('#rp_email').val('');				
+			},
+			error: function(data)
+			{
+				$('#reset_result')
+					.hide()
+					.addClass('text-danger')
+					.html('Try again :)')
+					.fadeIn('fast');
+
+				$('#reset_password').button('reset');
+			}
+		}
+
+		var data = {
+			'email': $('#rp_email').val()
+		}
+
+		w.ajax('/api/v1/auth/password/reset/', 'POST', JSON.stringify(data), callback, 'form_reset')
 	}
 }
