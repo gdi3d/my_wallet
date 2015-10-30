@@ -43,7 +43,7 @@ class AbstractItem(models.Model):
 	note = models.TextField(blank=True)
 	pending = models.BooleanField(default=False)
 	category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
-	tags = models.ManyToManyField(Tag, related_name='item_tags', null=True, blank=True)
+	tags = models.ManyToManyField(Tag, related_name='item_tags', blank=True)
 
 	class Meta:
 		abstract = True

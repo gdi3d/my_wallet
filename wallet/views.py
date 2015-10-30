@@ -55,7 +55,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
 
     	user = self.request.user
-    	wallet = self.request.QUERY_PARAMS.get('wallet')
+    	wallet = self.request.GET.get('wallet')
         string = self.request.GET.get('string')
         category_id = self.request.GET.get('category_id')
         income = self.request.GET.get('income')
@@ -117,7 +117,7 @@ class TransactionTotalViewSet(generics.RetrieveAPIView):
     def get(self, request):
 
         user = self.request.user
-        wallet = self.request.QUERY_PARAMS.get('wallet')
+        wallet = self.request.GET.get('wallet')
         string = self.request.GET.get('string')
         category_id = self.request.GET.get('category_id')
         income = self.request.GET.get('income')
