@@ -2,7 +2,7 @@ site_name: My Wallet
 theme: readthedocs
 docs_dir: 'docs'
 repo_url: https://github.com/gdi3d/my_wallet
-site_url: gdi3d.github.io/my_wallet
+site_url: https://gdi3d.github.io/my_wallet
 
 pages:
 - ['index.md', 'Home']
