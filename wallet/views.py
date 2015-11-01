@@ -20,6 +20,48 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 import operator
 
 # Create your views here.
+
+def transaction_search(request):
+
+    user = request.user
+    wallet = request.GET.get('wallet')
+    string = request.GET.get('string')
+    category_id = request.GET.get('category_id')
+    income = request.GET.get('income')
+    outcome = request.GET.get('outcome')
+
+    transactions = Transaction.objects.filter(wallet__user=user)
+
+    if wallet:
+        transactions = transactions.filter(wallet = wallet)
+
+    if string:
+        # search multiple terms
+        if ',' in string:
+            string = [s.strip() for s in string.split(',')]
+            
+            notes = reduce(operator.or_, (Q(item__note__icontains = s) for s in string))
+            category = reduce(operator.or_, (Q(item__category__name__icontains = s) for s in string))
+            tags = reduce(operator.or_, (Q(item__tags__name__icontains = s) for s in string))
+
+            transactions = transactions.filter(notes | category | tags)
+
+        else:
+        
+            transactions = transactions.filter(Q(item__note__icontains = string) | Q(item__category__name__icontains = string) | Q(item__tags__name__icontains = string))
+
+    if category_id:
+        category_id = category_id.split(',')
+        transactions = transactions.filter(item__category__id__in = category_id)
+
+    if income and not outcome:
+        transactions = transactions.filter(item__amount__gt = 0)
+    
+    if outcome and not income:
+        transactions = transactions.filter(item__amount__lt = 0)
+
+    return transactions
+
 class ItemViewSet(viewsets.ModelViewSet):
     """
     Viewing and editing items.
@@ -43,7 +85,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     * **api/v1/transactions/?wallet=WALLET_ID**
 
     * **api/v1/transactions/?string=STRING**  
-    Search items on transactions that has STRING on note or category property
+    Search items on transactions that has STRING on note, category or tag property
 
     * **api/v1/transactions/?category_id=CATEGORY_ID**  
     Search items on transactions that belongs to the specified CATEGORY_ID. If you want to choose multiple categories
@@ -53,45 +95,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)  
 
     def get_queryset(self):
-
-    	user = self.request.user
-    	wallet = self.request.GET.get('wallet')
-        string = self.request.GET.get('string')
-        category_id = self.request.GET.get('category_id')
-        income = self.request.GET.get('income')
-        outcome = self.request.GET.get('outcome')
-
-    	transactions = Transaction.objects.filter(wallet__user=user)
-
-    	if wallet:
-    		transactions = transactions.filter(wallet = wallet)
-
-        if string:
-            # search multiple terms
-            if ',' in string:
-                string = [s.strip() for s in string.split(',')]
-                
-                notes = reduce(operator.or_, (Q(item__note__icontains = s) for s in string))
-                category = reduce(operator.or_, (Q(item__category__name__icontains = s) for s in string))
-                tags = reduce(operator.or_, (Q(item__tags__name__icontains = s) for s in string))
-
-                transactions = transactions.filter(notes | category | tags)
-
-            else:
-            
-                transactions = transactions.filter(Q(item__note__icontains = string) | Q(item__category__name__icontains = string) | Q(item__tags__name__icontains = string))
-
-        if category_id:
-            category_id = category_id.split(',')
-            transactions = transactions.filter(item__category__id__in = category_id)
-
-        if income and not outcome:
-            transactions = transactions.filter(item__amount__gt = 0)
-        
-        if outcome and not income:
-            transactions = transactions.filter(item__amount__lt = 0)
-
-
+    	
+        transactions = transaction_search(self.request)
     	return transactions.order_by('-date')
 
 class TransactionTotalViewSet(generics.RetrieveAPIView):
@@ -102,11 +107,8 @@ class TransactionTotalViewSet(generics.RetrieveAPIView):
 
     * **api/v1/transactions-total/?wallet=WALLET_ID**
 
-    * **api/v1/transactions-total/?q=STRING**  
-    Search items on transactions that has STRING on note property
-
-    * **api/v1/transactions-total/?category=STRING**  
-    Search items on transactions that belong to a category that has STRING on name property
+    * **api/v1/transactions-total/?string=STRING**  
+    Search items on transactions that has STRING on note, category or tag property
 
     * **api/v1/transactions-total/?category_id=CATEGORY_ID**  
     Search items on transactions that belongs to the specified CATEGORY_ID. If you want to choose multiple categories
@@ -116,47 +118,7 @@ class TransactionTotalViewSet(generics.RetrieveAPIView):
 
     def get(self, request):
 
-        user = self.request.user
-        wallet = self.request.GET.get('wallet')
-        string = self.request.GET.get('string')
-        category_id = self.request.GET.get('category_id')
-        income = self.request.GET.get('income')
-        outcome = self.request.GET.get('outcome')
-
-        transactions = Transaction.objects.filter(wallet__user=user)
-
-        if wallet:
-            transactions = transactions.filter(wallet = wallet)
-
-        if string:
-            # search multiple terms
-            if ',' in string:
-                string = [s.strip() for s in string.split(',')]
-                
-                notes = reduce(operator.or_, (Q(item__note__icontains = s) for s in string))
-                category = reduce(operator.or_, (Q(item__category__name__icontains = s) for s in string))
-                tags = reduce(operator.or_, (Q(item__tags__name__icontains = s) for s in string))
-
-                transactions = transactions.filter(notes | category | tags)
-
-            else:
-            
-                transactions = transactions.filter(Q(item__note__icontains = string) | Q(item__category__name__icontains = string) | Q(item__tags__name__icontains = string))
-
-        if category_id:
-            category_id = category_id.split(',')
-            transactions = transactions.filter(item__category__id__in = category_id)
-
-        if income and not outcome:
-            transactions = transactions.filter(item__amount__gt = 0)
-        
-        if outcome and not income:
-            transactions = transactions.filter(item__amount__lt = 0)
-
-        transactions = transactions.aggregate(total=(Sum('item__amount')))
-
-        serializer = TransactionsTotalSerializer(transactions)
-
+        transactions = transaction_search(self.request)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class CategoryViewSet(viewsets.ModelViewSet):

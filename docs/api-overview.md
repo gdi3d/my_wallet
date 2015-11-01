@@ -18,8 +18,6 @@ Or use the admin [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin) with
 * [Login](api-login.md)
 * [Registration](api-registration.md)
 * [Reset Password](api-reset-password.md)
-* Transactions
-* Transactions Total
-* Wallets
-* Wallets Total
-* Category
+* [Transactions](api-transactions.md)
+* [Wallets](api-wallets.md)
+* [Category](api-category.md)
