@@ -902,6 +902,15 @@ w.history_view =
 			delay(function() { w.history_view.collect_filter(); }, 250);
 		});
 
+		$('.input-daterange input').each(function() {
+		    $(this).datepicker("clearDates");
+		});
+
+		$('.datepicker').datepicker()
+		    .on('changeDate', function(e) {
+		    	w.history_view.collect_filter();
+		    });
+
 	},
 	/**
 	 * Load the records
@@ -1019,11 +1028,21 @@ w.history_view =
 	 */
 	collect_filter: function()
 	{
+		var date_start = $('#date_start').val();
+		var date_end = $('#date_end').val();
+		var date_range = ''
+
+		if(date_start && date_end)
+		{
+			var date_range = 'range' + date_start + '.' + date_end
+		}
+
 		w.history_view.filter = {
 			'category_id': $('#categories').val().join(),
 			'income': ($('#income').prop('checked'))?'1':'',
 			'outcome': ($('#outcome').prop('checked'))?'1':'',
-			'string': $('#q').val()
+			'string': $('#q').val(),
+			'date': date_range
 		}
 
 		w.history_view.load(1);

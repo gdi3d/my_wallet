@@ -29,6 +29,7 @@ def transaction_search(request):
     category_id = request.GET.get('category_id')
     income = request.GET.get('income')
     outcome = request.GET.get('outcome')
+    date = request.GET.get('date')
 
     transactions = Transaction.objects.filter(wallet__user=user)
 
@@ -59,6 +60,22 @@ def transaction_search(request):
     
     if outcome and not income:
         transactions = transactions.filter(item__amount__lt = 0)
+
+    if date:
+        if 'range' in date:
+            date = date.split('.')
+            date[0] = date[0].replace('range', '')
+            print date
+            transactions = transactions.filter(date__range = date)
+        elif date == 'last_year':
+            pass
+        elif date == 'prev_month':
+            pass
+        elif date == 'current_year':
+            pass
+        elif date == 'current_month':
+            pass
+
 
     return transactions
 
@@ -119,6 +136,10 @@ class TransactionTotalViewSet(generics.RetrieveAPIView):
     def get(self, request):
 
         transactions = transaction_search(self.request)
+        transactions = transactions.aggregate(total=(Sum('item__amount')))
+        
+        serializer = TransactionsTotalSerializer(transactions)
+
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class CategoryViewSet(viewsets.ModelViewSet):

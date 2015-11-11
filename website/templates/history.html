@@ -18,9 +18,18 @@
 				</label>
 			</div>
 
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<input type="text" class="form-control" id="q" placeholder="Search...">
 				<p class="help-block"><small>use comma for multiple terms</small></p>
+			</div>
+
+			<div class="col-md-4">
+				<label>Date range</label>
+				<div class="input-group input-daterange">
+				    <input type="text" class="form-control datepicker" id="date_start" data-date-format="yyyy-mm-dd">
+				    <span class="input-group-addon">to</span>
+				    <input type="text" class="form-control datepicker" id="date_end" data-date-format="yyyy-mm-dd">
+				</div>
 			</div>
 		</div>
 	</form>
