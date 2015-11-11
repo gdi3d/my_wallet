@@ -24,8 +24,17 @@
 			</div>
 
 			<div class="col-md-4">
-				<label>Date range</label>
-				<div class="input-group input-daterange">
+				<label>Date</label><br>
+				<select class="form-control" id="date_filter">
+					<option>All</option>
+					<option value="range">Range</option>
+					<option value="current_month">Current Month</option>
+					<option value="prev_month">Previous Month</option>
+					<option value="current_year">Current Year</option>
+					<option value="prev_year">Previous Year</option>
+				</select>
+
+				<div class="input-group input-daterange" id="filter_range_widget" style="display: none">
 				    <input type="text" class="form-control datepicker" id="date_start" data-date-format="yyyy-mm-dd">
 				    <span class="input-group-addon">to</span>
 				    <input type="text" class="form-control datepicker" id="date_end" data-date-format="yyyy-mm-dd">

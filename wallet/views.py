@@ -14,10 +14,13 @@ from rest_framework.response import Response
 from wallet.serializers import ItemSerializer, TransactionSerializer, CategorySerializer, WalletSerializer, WalletTotalSerializer, TransactionsTotalSerializer, TagSerializer
 
 from wallet.models import Item, Transaction, Category, Wallet, Tag
+from wallet.helpers import prev_month_range, prev_year_range
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 import operator
+import calendar
+import datetime
 
 # Create your views here.
 
@@ -65,17 +68,33 @@ def transaction_search(request):
         if 'range' in date:
             date = date.split('.')
             date[0] = date[0].replace('range', '')
-            print date
             transactions = transactions.filter(date__range = date)
-        elif date == 'last_year':
-            pass
+        
+        elif date == 'prev_year':
+        
+            prev_year = prev_year_range()
+            transactions = transactions.filter(date__range = [prev_year['start'], prev_year['end']])
+        
         elif date == 'prev_month':
-            pass
+        
+            prev_month = prev_month_range()
+            transactions = transactions.filter(date__range = [prev_month['start'], prev_month['end']])
+        
         elif date == 'current_year':
-            pass
+        
+            today = datetime.datetime.today()
+            last_date = datetime.date(today.year, 12, 31)
+            first_date = datetime.date(today.year, 1, 1)            
+            transactions = transactions.filter(date__range = [first_date, last_date])        
+        
         elif date == 'current_month':
-            pass
+        
+            today = datetime.datetime.today()
+            last_date = calendar.monthrange(today.year, today.month)[1]
+            last_date = datetime.date(today.year, today.month, last_date)
+            first_date = datetime.date(today.year, today.month, 1)
 
+            transactions = transactions.filter(date__range = [first_date, last_date])
 
     return transactions
 

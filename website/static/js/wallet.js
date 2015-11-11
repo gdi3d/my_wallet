@@ -911,6 +911,19 @@ w.history_view =
 		    	w.history_view.collect_filter();
 		    });
 
+		$('#date_filter').change(function(e){
+			if($(this).val() == 'range')
+			{
+				$('#filter_range_widget').fadeIn('fast');
+			}
+			else
+			{
+				$('#filter_range_widget').fadeOut('fast');
+			}
+
+			w.history_view.collect_filter();
+		});
+
 	},
 	/**
 	 * Load the records
@@ -1028,21 +1041,32 @@ w.history_view =
 	 */
 	collect_filter: function()
 	{
-		var date_start = $('#date_start').val();
-		var date_end = $('#date_end').val();
-		var date_range = ''
+		var date = '';
 
-		if(date_start && date_end)
+		switch($('#date_filter').val())
 		{
-			var date_range = 'range' + date_start + '.' + date_end
-		}
+			case 'range':
+				var date_start = $('#date_start').val();
+				var date_end = $('#date_end').val();
+				var date_range = ''
 
+				if(date_start && date_end)
+				{
+					date = 'range' + date_start + '.' + date_end
+				}
+				break;
+
+			default:
+				date = $('#date_filter').val();
+				break;
+		}
+		
 		w.history_view.filter = {
 			'category_id': $('#categories').val().join(),
 			'income': ($('#income').prop('checked'))?'1':'',
 			'outcome': ($('#outcome').prop('checked'))?'1':'',
 			'string': $('#q').val(),
-			'date': date_range
+			'date': date
 		}
 
 		w.history_view.load(1);
