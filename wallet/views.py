@@ -126,6 +126,22 @@ class TransactionViewSet(viewsets.ModelViewSet):
     * **api/v1/transactions/?category_id=CATEGORY_ID**  
     Search items on transactions that belongs to the specified CATEGORY_ID. If you want to choose multiple categories
     set the ids separated by a comma like category_id=1,2,3
+    
+    * **api/v1/transactions/?date=range2015-08-07.2015-10-23**
+    Search date by range  
+    
+    * **api/v1/transactions/?date=prev_year**
+    Search all transactions from the previous year
+    
+    * **api/v1/transactions/?date=prev_month**
+    Search all transactions from the previous month
+
+    * **api/v1/transactions/?date=current_year**
+    Search all transactions from the current year
+
+    * **api/v1/transactions/?date=current_month**
+    Search all transactions from the current month
+
     """
     serializer_class = TransactionSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)  
@@ -149,6 +165,21 @@ class TransactionTotalViewSet(generics.RetrieveAPIView):
     * **api/v1/transactions-total/?category_id=CATEGORY_ID**  
     Search items on transactions that belongs to the specified CATEGORY_ID. If you want to choose multiple categories
     set the ids separated by a comma like category_id=1,2,3
+
+    * **api/v1/transactions/?date=range2015-08-07.2015-10-23**
+    Search date by range  
+    
+    * **api/v1/transactions/?date=prev_year**
+    Search all transactions from the previous year
+    
+    * **api/v1/transactions/?date=prev_month**
+    Search all transactions from the previous month
+
+    * **api/v1/transactions/?date=current_year**
+    Search all transactions from the current year
+
+    * **api/v1/transactions/?date=current_month**
+    Search all transactions from the current month
     """
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
