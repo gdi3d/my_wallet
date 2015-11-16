@@ -51,7 +51,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 		wallet = Wallet.objects.get(pk=validated_data.pop('wallet_id'))
 
-		transaction = Transaction.objects.create(item=item, wallet=wallet)       
+		transaction = Transaction.objects.create(item=item, wallet=wallet, date=validated_data.pop('date'))       
 		
 		return transaction
 
