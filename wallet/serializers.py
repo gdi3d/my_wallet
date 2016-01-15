@@ -36,7 +36,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 	item = ItemSerializer()	
 	wallet = WalletSerializer(read_only=True)
 	wallet_id = serializers.IntegerField(write_only=True)
-	date = serializers.DateField(input_formats=('%Y/%m/%d', ""))	
+	date = serializers.DateField(input_formats=('%Y/%m/%d',))	
 
 	class Meta:
 		model = Transaction
@@ -51,7 +51,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 		wallet = Wallet.objects.get(pk=validated_data.pop('wallet_id'))
 
-		transaction = Transaction.objects.create(item=item, wallet=wallet, date=validated_data.pop('date'))       
+		transaction = Transaction.objects.create(item=item, wallet=wallet, date=validated_data.pop('date'))
 		
 		return transaction
 
