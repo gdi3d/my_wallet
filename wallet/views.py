@@ -11,7 +11,7 @@ from rest_framework import generics
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 
-from wallet.serializers import ItemSerializer, TransactionSerializer, CategorySerializer, WalletSerializer, WalletTotalSerializer, TransactionsTotalSerializer, TagSerializer
+from wallet.serializers import ItemSerializer, TransactionSerializer, CategorySerializer, WalletSerializer, WalletTotalSerializer, TransactionsTotalSerializer, TagSerializer, GraphSeriesSerializer
 
 from wallet.models import Item, Transaction, Category, Wallet, Tag
 from wallet.helpers import prev_month_range, prev_year_range
@@ -21,6 +21,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 import operator
 import calendar
 import datetime
+import time
 
 # Create your views here.
 
@@ -275,4 +276,53 @@ class TagsViewSet(viewsets.ModelViewSet):
             tag = tag.filter(name__icontains=search)
 
         return tag
+
+class GraphicsViewSet(generics.RetrieveAPIView):
+
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def get(self, request, wallet_id):
+
+        transactions = transaction_search(self.request)
+
+        aggregated = dict()
+
+        # group amounts by year_month
+        # on a dict
+        for t in transactions:
+            # convert date to timestamp to make it
+            # easy to sort in the next for
+            date = datetime.date(t.date.year, t.date.month, 1)
+            date = time.mktime(date.timetuple())
+
+            year_month = '%s' % date
+            if year_month not in aggregated:
+                aggregated[year_month] = 0
+
+            aggregated[year_month] += t.item.amount
+
+        data = list()
+        first = False
+
+        # iterate the aggregated dict sorting the key
+        # to make the graphic ordered by date
+        for k, v in sorted(aggregated.iteritems()):
+            # convert to a standard yyyy-mm-dd
+            year_month = datetime.date.fromtimestamp(float(k))
+
+            # if it's the first iteration add
+            # the initial wallet amount
+            if not first:
+                # get wallet initial ammount
+                w = Wallet.objects.get(pk=wallet_id)
+                aggregated = v + w.initial_amount
+                first = True
+            else:
+                aggregated += v
+
+            data.append({'year_month': year_month, 'amount': aggregated})
+        
+        serializer = GraphSeriesSerializer(data, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 

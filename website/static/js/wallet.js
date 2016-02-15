@@ -1092,6 +1092,7 @@ function dashboard_view_wallet_widget_row(wallet, total)
 w.dashboard_view =
 {
 	wallets_rows: {},
+	wallet_id: new Array(),
 	/**
 	 * Initializate the view
 	 */
@@ -1109,10 +1110,16 @@ w.dashboard_view =
 	        	var total = Number(v.wallet.initial_amount) + Number(v.total)
 	        	total = w.format_number(total);
 
+	        	w.dashboard_view.wallet_id.push(v.wallet.id)
+
+	        	// draw wallet history
+	        	w.dashboard_view.history_graph(v.wallet.name, v.wallet.id);		
+
 	        	return new dashboard_view_wallet_widget_row(v.wallet, total) 
 	        });
 
-	        w.dashboard_view.wallets_rows(mapped_wallet);			
+	        w.dashboard_view.wallets_rows(mapped_wallet);	
+
 	    });
 
 	    $.getJSON("/api/v1/wallet/", function(data)
@@ -1121,7 +1128,7 @@ w.dashboard_view =
 			{
 				$('#no_wallets').fadeIn('fast');
 			}
-		});	    
+		});
 	},
 	/**
 	 * Logout the user
@@ -1137,6 +1144,54 @@ w.dashboard_view =
 		}		
 
 		w.ajax('/api/v1/auth/logout/', 'POST', null, callback)
+	},
+	/**
+	* Draw the wallet history
+	*/
+	history_graph: function(name, id)
+	{
+
+		// create an empty canvas and attach it to container
+		var template = '<div class="col-sm-6 col-lg-offset-3"><h4>' + name + '</h4><canvas id="wallet_canvas_' + id +'"></canvas></div>';
+
+		$('#wallet_graphic').append(template);
+
+		// get the data
+		$.getJSON('api/v1/graphic/' + id, 
+			function(data)
+			{
+				graph_values = new Array()
+				graph_dates = new Array()
+
+				$.each(data, function(k,v)
+				{
+					graph_values.push(v.amount);
+					graph_dates.push(v.year_month);
+				});
+
+				var lineChartData = {
+					labels : graph_dates,
+					datasets : [
+						{
+							label: "Wallet History",
+							fillColor : "rgba(220,220,220,0.2)",
+							strokeColor : "rgba(220,220,220,1)",
+							pointColor : "rgba(220,220,220,1)",
+							pointStrokeColor : "#fff",
+							pointHighlightFill : "#fff",
+							pointHighlightStroke : "rgba(220,220,220,1)",
+							data : graph_values
+						}
+					]
+				}
+
+				var ctx = $("#wallet_canvas_" + id).get(0).getContext("2d");
+				window.myLine = new Chart(ctx).Line(lineChartData, {
+					responsive: true,
+					bezierCurve: false
+				});
+			}
+		);
 	}
 }
 

@@ -104,3 +104,8 @@ class WalletTotalSerializer(serializers.Serializer):
 
 	wallet = WalletSerializer()
 	total = serializers.DecimalField(max_digits=12, decimal_places=4)
+
+class GraphSeriesSerializer(serializers.Serializer):
+
+	year_month = serializers.CharField()
+	amount = serializers.DecimalField(max_digits=12, decimal_places=4) 

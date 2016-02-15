@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from wallet.views import ItemViewSet, TransactionViewSet, TransactionTotalViewSet, CategoryViewSet, WalletViewSet, WalletTotalViewSet, TagsViewSet
+from wallet.views import ItemViewSet, TransactionViewSet, TransactionTotalViewSet, CategoryViewSet, WalletViewSet, WalletTotalViewSet, TagsViewSet, GraphicsViewSet
 
 from rest_framework.routers import DefaultRouter
 
@@ -13,5 +13,6 @@ router.register(r'tags', TagsViewSet, base_name='tags')
 
 urlpatterns = patterns("",
 	url(r'^transactions-total/', TransactionTotalViewSet.as_view(), name='transactions-total'),
+	url(r'^graphic/(?P<wallet_id>\d+)', GraphicsViewSet.as_view(), name='graphic-series'),
     url(r'', include(router.urls))
 )
