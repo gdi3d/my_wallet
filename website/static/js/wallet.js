@@ -882,20 +882,30 @@ w.history_view =
 	 * @return {[type]} [description]
 	 */
 	init: function()
-	{		
-		w.category_view._categories_list(function(categories){
-			// defines the view object model			
-			w.history_view.model = ko.mapping.fromJS({
-				'categories': categories,
-				'rows': ko.observableArray([]),
-				'category_id': null
-			});
-			
-			ko.applyBindings(w.history_view.model);
-			w.history_view.load(1);
+	{
+		w.history_view.model = ko.mapping.fromJS({
+			'categories': Array(),
+			'rows': ko.observableArray([]),
+			'category_id': null,
+			'wallets': Array()
 		});
 
-		$('#categories, #income, #outcome').click(function(){
+		// bind model to view
+		ko.applyBindings(w.history_view.model);
+		w.history_view.load(1);
+
+		// load categories to select element
+		w.category_view._categories_list(function(categories){
+			w.history_view.model.categories(categories);
+		});
+
+		// load wallets to select element
+		w._wallets_ko(function(wallets)
+		{
+			w.history_view.model.wallets(wallets);
+		});	
+
+		$('#categories, #income, #outcome, #wallet').click(function(){
 			w.history_view.collect_filter();
 		});
 
@@ -1067,7 +1077,8 @@ w.history_view =
 			'income': ($('#income').prop('checked'))?'1':'',
 			'outcome': ($('#outcome').prop('checked'))?'1':'',
 			'string': $('#q').val(),
-			'date': date
+			'date': date,
+			'wallet': $('#wallet').val().join()
 		}
 
 		w.history_view.load(1);

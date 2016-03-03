@@ -283,7 +283,7 @@ class GraphicsViewSet(generics.RetrieveAPIView):
 
     def get(self, request, wallet_id):
 
-        transactions = transaction_search(self.request)
+        transactions = transaction_search(self.request).filter(wallet = wallet_id)
 
         aggregated = dict()
 

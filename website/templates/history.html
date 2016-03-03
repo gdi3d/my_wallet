@@ -9,6 +9,11 @@
 			</div>
 
 			<div class="col-md-2">
+				<select name="wallet" id="wallet" multiple class="form-control" data-bind="options: wallets, optionsText: 'name', optionsValue:'id', optionsCaption: 'All wallets', value: ''">
+				</select>
+			</div>
+
+			<div class="col-md-2">
 				<label class="checkbox-inline">
 				  <input type="checkbox" id="income" value="1" checked> Income
 				</label>
@@ -23,8 +28,7 @@
 				<p class="help-block"><small>use comma for multiple terms</small></p>
 			</div>
 
-			<div class="col-md-4">
-				<label>Date</label><br>
+			<div class="col-md-2">
 				<select class="form-control" id="date_filter">
 					<option>All</option>
 					<option value="range">Range</option>
@@ -33,6 +37,7 @@
 					<option value="current_year">Current Year</option>
 					<option value="prev_year">Previous Year</option>
 				</select>
+				<label for="date_filter"><small>Date</small></label>
 
 				<div class="input-group input-daterange" id="filter_range_widget" style="display: none">
 				    <input type="text" class="form-control datepicker" id="date_start" data-date-format="yyyy-mm-dd">
