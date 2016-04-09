@@ -958,10 +958,18 @@ w.history_view =
 	        w.history_view.model.rows(mapped_row);
 	        w.history_view.result_count = data.count;
 	        
-	        // load it if need it!
-	        if($('#paginator').html().length <= 0 && data.count > w.history_view.page_size)
+	        // load the paginator for first time
+	        if($('#paginator').html().length <= 0)
 	        {
-	        	w.history_view.paginator();	        	
+	        	w.history_view.paginator();	
+	        }
+
+	        // reload the paginator to reset changes
+	        // to reflect the new dataset size
+	        if(w.history_view.filter_changed)
+	        {
+	        	w.history_view.paginator();
+	        	w.history_view.filter_changed = false;
 	        }
 
 	        w.history_view.set_total();
@@ -1002,7 +1010,7 @@ w.history_view =
 	        cssStyle: 'light-theme',
 	        onPageClick: function(pageNumber, event)
 	        {
-	        	w.history_view.load(pageNumber)
+	        	w.history_view.load(pageNumber);
 	        }	        
 	    });	    
 	},
@@ -1045,6 +1053,7 @@ w.history_view =
 		// call the endpoint to delete the transaction
 		w.ajax('/api/v1/transactions/'+id, 'DELETE', {}, callback)
 	},
+	filter_changed: false,
 	/**
 	 * Triggered when selecting a category from the dropdown
 	 * @param  {object} data 
@@ -1081,6 +1090,7 @@ w.history_view =
 			'wallet': $('#wallet').val().join()
 		}
 
+		w.history_view.filter_changed = true;
 		w.history_view.load(1);
 	}
 }
