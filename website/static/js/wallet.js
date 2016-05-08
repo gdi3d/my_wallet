@@ -1256,7 +1256,7 @@ w.home_view =
 		$('#form_signin').submit(function(e){ 
 			w.home_view.login();
 			$('#btn_login').button('loading');
-			 event.preventDefault();
+			 e.preventDefault();
 		});
 
 		$('#btn_register').click(function(){
@@ -1283,13 +1283,13 @@ w.home_view =
 	    $('#form_register').submit(function(e){ 
 			w.home_view.register();
 			$('#create_account').button('loading');
-			 event.preventDefault();
+			 e.preventDefault();
 		});
 
 		$('#form_reset').submit(function(e){ 
 			w.home_view.reset_password();
 			$('#reset_password').button('loading');
-			 event.preventDefault();
+			 e.preventDefault();
 		});
 
 
