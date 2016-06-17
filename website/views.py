@@ -15,8 +15,18 @@ def money(request, pk=None):
 	
 	if not pk:
 		pk = ''
-		
-	context = {'on_transaction': True, 'pk': pk}
+
+	url = request.path.split('/')[:-1][-1]
+	
+	income = False
+	outcome = False
+
+	if url == 'in':
+		income = True
+	else:
+		outcome = True
+
+	context = {'income': income, 'outcome': outcome, 'pk': pk}
 
 	return render(request, 'transaction.html', context)
 

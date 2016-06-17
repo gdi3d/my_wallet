@@ -286,6 +286,7 @@ w.transaction_view =
 	model: {},
 	_wallets: {},
 	transaction_type: '',
+	operation_type: null,
 	/**
 	 * Initializate the view
 	 * @param  {integer} id The transaction id to be edited
@@ -380,7 +381,31 @@ w.transaction_view =
 		});
 
 		$('#amount').numeric({ decimalPlaces: w.DECIMAL_PLACES });
-		$('#amount').keyup(function()
+		
+
+		$('#currency').html(w.CURRENCY_SYMBOL);
+
+		// set operation type
+		var url = window.location.pathname;
+		url = url.split('/');
+		url.pop();
+		var operation = url.pop();
+
+		if(operation == 'in')
+		{
+			$('#operation_type').html('+');
+			w.transaction_view.income();
+			w.transaction_view.operation_type = '+';
+		}
+		else if(operation == 'out')
+		{
+			$('#operation_type').html('-');
+			w.transaction_view.expense();
+			w.transaction_view.operation_type = '-';
+		}
+		else
+		{
+			$('#amount').keyup(function()
 			{ 
 				val = $(this).val();
 
@@ -393,8 +418,7 @@ w.transaction_view =
 					w.transaction_view.income();
 				}
 			});
-
-		$('#currency').html(w.CURRENCY_SYMBOL);
+		}
 	},
 	/**
 	 * Set text for income money
@@ -463,6 +487,12 @@ w.transaction_view =
 			'wallet_id': wallet_id,
 			'id': w.transaction_view.model.id()
 						
+		}
+
+		// add minus sign on expenses
+		if(w.transaction_view.operation_type == '-')
+		{
+			data['item']['amount'] = - Number(data['item']['amount'])
 		}
 		
 		id = w.transaction_view.model.id();
@@ -1367,9 +1397,19 @@ w.home_view =
 	}
 }
 
- Date.prototype.yyyymmdd = function() {
-   var yyyy = this.getFullYear().toString();
-   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-   var dd  = this.getDate().toString();
-   return yyyy + '/' + (mm[1]?mm:"0"+mm[0]) + '/' + (dd[1]?dd:"0"+dd[0]); // padding
-  };
+Date.prototype.yyyymmdd = function() {
+	var yyyy = this.getFullYear().toString();
+	var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+	var dd  = this.getDate().toString();
+	return yyyy + '/' + (mm[1]?mm:"0"+mm[0]) + '/' + (dd[1]?dd:"0"+dd[0]); // padding
+};
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
